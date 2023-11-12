@@ -8,12 +8,6 @@
     "target": "es6",
     "jsx": "react"
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-  ".eslintrc.js"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx", ".eslintrc.js"],
+  "exclude": ["node_modules"]
 }

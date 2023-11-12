@@ -7,7 +7,10 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
   onSnapshot,
+  orderBy,
+  query,
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
@@ -176,3 +179,15 @@ export const checkUserProfile = async (): Promise<boolean> => {
 //     isFirstLoad = false;
 //   }
 // });
+
+export const subscribeToMemes = (callback: (posts: CaPost[]) => void) => {
+  const memesCollectionRef = collection(db, 'posts');
+  const memesQuery = query(memesCollectionRef, orderBy('date'), limit(20));
+  return onSnapshot(memesQuery, (snapshot) => {
+    const memes = snapshot.docs.map((doc) => ({
+      postId: doc.id,
+      ...(doc.data() as CaPost),
+    }));
+    callback(memes);
+  });
+};

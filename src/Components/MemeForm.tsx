@@ -52,7 +52,8 @@ export const MemeForm = () => {
       mediaUrl: image,
       created: Timestamp.now(),
       category: values.category,
-      likes: 0,
+      upvotes: 0,
+      downvotes: 0,
       commentsCount: 0,
       comments: [],
     };

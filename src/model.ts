@@ -13,13 +13,17 @@ export interface CaUser extends CaUserId {
   bio?: string;
   posts?: CaPost[];
 }
-export interface CaPost {
+export interface CaPostId {
+  postId?: string;
+}
+export interface CaPost extends CaPostId {
   userId: string;
   caption: string;
   mediaUrl: string;
   created: Timestamp;
   category: string;
-  likes: number;
+  upvotes: number;
+  downvotes: number;
   commentsCount: number;
   comments: CaComment[];
 }

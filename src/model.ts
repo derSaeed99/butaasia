@@ -23,6 +23,17 @@ export interface CaPost {
   commentsCount: number;
   comments: CaComment[];
 }
+export interface CaMeme {
+  box_count: number;
+  captions: string;
+  height: number;
+  id: string;
+  upvotes: number;
+  downvotes: number;
+  name: string;
+  url: string;
+  width: number;
+}
 export interface CaComment {
   commentId: string;
   postId: string;

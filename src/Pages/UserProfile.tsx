@@ -101,7 +101,7 @@ export const UserProfile = () => {
     getUsers();
   }, []);
   const userCount = length + 1;
-  console.log(length);
+
   useEffect(() => {
     if (userProfile) {
       setInitialValues({

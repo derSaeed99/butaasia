@@ -7,7 +7,6 @@ import {
   getDoc,
   getDocs,
   getFirestore,
-  increment,
   onSnapshot,
   setDoc,
   updateDoc,
@@ -18,12 +17,12 @@ import { CaPost, CaUser } from './model';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOM,
-  projectId: import.meta.env.VITE_FIREBASE_PRJ_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STG_BKT,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MSG_ID,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MESG_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -144,26 +143,36 @@ export const uploadMemeAndSaveUrl = async (
   }
 };
 
-// Increment counter every time a new user logs in
-export const incrementUserCount = async (): Promise<number> => {
-  const counterDocRef = doc(db, 'counters', 'userCount');
-  const counterDoc = await getDoc(counterDocRef);
-  const currentCount = counterDoc.data()?.count || 0;
+export const checkUserProfile = async (): Promise<boolean> => {
   const currentUser = auth.currentUser;
-  if (currentUser && !counterDoc.data()?.users[currentUser.uid]) {
-    await updateDoc(counterDocRef, {
-      count: increment(1),
-    });
-    return currentCount + 1;
+  if (!currentUser) {
+    return false;
   }
-  return currentCount;
+  const profileDocRef = doc(db, 'users', currentUser.uid);
+  const profileDoc = await getDoc(profileDocRef);
+  return profileDoc.exists();
 };
 
-let isFirstLoad = true;
+// Increment counter every time a new user logs in
+// export const incrementUserCount = async (): Promise<number> => {
+//   const counterDocRef = doc(db, 'counters', 'userCount');
+//   const counterDoc = await getDoc(counterDocRef);
+//   const currentCount = counterDoc.data()?.count || 0;
+//   const currentUser = auth.currentUser;
+//   if (currentUser && !counterDoc.data()?.users[currentUser.uid]) {
+//     await updateDoc(counterDocRef, {
+//       count: increment(1),
+//     });
+//     return currentCount + 1;
+//   }
+//   return currentCount;
+// };
 
-onAuthStateChanged(auth, async (user: User | null) => {
-  if (user && isFirstLoad) {
-    await incrementUserCount();
-    isFirstLoad = false;
-  }
-});
+// let isFirstLoad = true;
+
+// onAuthStateChanged(auth, async (user: User | null) => {
+//   if (user && isFirstLoad) {
+//     await incrementUserCount();
+//     isFirstLoad = false;
+//   }
+// });

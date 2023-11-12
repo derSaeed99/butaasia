@@ -15,23 +15,35 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-export interface CaMeme {
-  box_count: number;
-  captions: string;
-  height: number;
-  id: string;
-  name: string;
-  url: string;
-  width: number;
-}
+import { auth } from '../firebase';
+import { CaMeme } from '../model';
 
 interface HotPageProps {
   memes?: CaMeme[];
 }
 
 export const HomePage = ({ memes }: HotPageProps) => {
+  const navigate = useNavigate();
+  const handleUpvote = () => {
+    if (auth) {
+      navigate('/signin');
+    }
+    console.log('upvote');
+  };
+  const handleDownVote = () => {
+    if (auth) {
+      navigate('/signin');
+    }
+    console.log('downvote');
+  };
+  const handleMoreVert = () => {
+    if (auth) {
+      navigate('/signin');
+    }
+    console.log('report post');
+  };
   return (
     <Grid
       container
@@ -63,7 +75,11 @@ export const HomePage = ({ memes }: HotPageProps) => {
                       </Typography>
                     }
                     secondary={
-                      <IconButton size="small" sx={{ color: 'GrayText' }}>
+                      <IconButton
+                        size="small"
+                        sx={{ color: 'GrayText' }}
+                        onClick={handleMoreVert}
+                      >
                         <MoreVert />
                       </IconButton>
                     }
@@ -100,20 +116,28 @@ export const HomePage = ({ memes }: HotPageProps) => {
                       justifyContent: 'flex-start',
                     }}
                   >
-                    <IconButton size="medium" sx={{ color: 'GrayText' }}>
+                    <IconButton
+                      size="medium"
+                      sx={{ color: 'GrayText' }}
+                      onClick={handleUpvote}
+                    >
                       <ThumbUpOffAltIcon />
                     </IconButton>
                     <Box>
                       <Typography variant="body1" sx={{ color: 'GrayText' }}>
-                        {Math.floor(Math.random() * 100)}
+                        {post.upvotes}
                       </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-                      <IconButton size="medium" sx={{ color: 'GrayText' }}>
+                      <IconButton
+                        size="medium"
+                        sx={{ color: 'GrayText' }}
+                        onClick={handleDownVote}
+                      >
                         <ThumbDownOffAltIcon />
                       </IconButton>
                       <Typography variant="body1" sx={{ color: 'GrayText', ml: 1 }}>
-                        {Math.floor(Math.random() * 100)}
+                        {post.downvotes}
                       </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>

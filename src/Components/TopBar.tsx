@@ -143,19 +143,26 @@ export const TopBar = () => {
                   anchorOrigin={popoverOrigin}
                   transformOrigin={popoverOrigin}
                 >
-                  <MenuItem sx={{ color: 'white', m: 1 }} onClick={handleClose}>
-                    <LogoutIcon sx={{ mr: 1 }} onClick={logout} />
-                    Sign Out
+                  <MenuItem>
+                    <IconButton sx={{ color: 'white', m: 1 }} onClick={logout}>
+                      <LogoutIcon />
+                      Sign Out
+                    </IconButton>
                   </MenuItem>
-                  <MenuItem
-                    sx={{ color: 'white', m: 1 }}
-                    onClick={() => navigate('/profile')}
-                  >
-                    <PersonIcon sx={{ mr: 1 }}>Profile</PersonIcon>
+                  <MenuItem>
+                    <IconButton
+                      sx={{ color: 'white', m: 1 }}
+                      onClick={() => navigate('/profile')}
+                    >
+                      <PersonIcon />
+                      Profile
+                    </IconButton>
                   </MenuItem>
-                  <MenuItem sx={{ color: 'white', m: 1 }} onClick={handleClose}>
-                    <SmsIcon sx={{ mr: 1 }} />
-                    Messages
+                  <MenuItem>
+                    <IconButton sx={{ color: 'white', m: 1 }} onClick={handleClose}>
+                      <SmsIcon />
+                      Messages
+                    </IconButton>
                   </MenuItem>
                 </Menu>
               </Box>

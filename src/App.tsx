@@ -7,7 +7,8 @@ import { MemeForm } from './Components/MemeForm';
 import { SignIn } from './Components/SignIn';
 import { TopBar } from './Components/TopBar';
 import { auth } from './firebase';
-import { CaMeme, HomePage } from './Pages/HomePage';
+import { CaMeme } from './model';
+import { HomePage } from './Pages/HomePage';
 import { UserProfile } from './Pages/UserProfile';
 import ProtectedRoutes from './utils/ProtectedRoutes';
 

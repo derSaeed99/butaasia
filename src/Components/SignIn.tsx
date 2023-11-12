@@ -1,16 +1,16 @@
 import 'firebase/auth';
 
 import { Avatar, Box, Button, Grid, Typography } from '@mui/material';
-import { GoogleAuthProvider, signInWithRedirect, User } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import logo from '../assets/miimcom-logo.svg';
-import { auth } from '../firebase';
+import { auth, checkUserProfile } from '../firebase';
 import { Register } from './Register';
 
 export const SignIn = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -25,11 +25,13 @@ export const SignIn = () => {
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithRedirect(auth, provider);
-      if (user) {
+      await signInWithPopup(auth, provider);
+      const hasProfile = await checkUserProfile();
+      if (hasProfile) {
+        navigate('/');
+      } else {
         navigate('/profile');
       }
-      console.log(user);
     } catch (error) {
       setError(`Unexpected error while logging in: ${error}`);
     }

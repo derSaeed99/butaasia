@@ -14,14 +14,13 @@ import * as admin from "firebase-admin";
 //   response.send("Hello from Firebase!");
 // })
 
-
 admin.initializeApp();
 
 const firestore = admin.firestore();
 
 export const incrementUserCount = functions.firestore
   .document("users/{userId}")
-  .onCreate(async (snap,) => {
+  .onCreate(async (snap) => {
     const countersRef = firestore.collection("counters").doc("userCount");
     const userDocRef = snap.ref;
     const userDoc = snap.data();
@@ -33,4 +32,3 @@ export const incrementUserCount = functions.firestore
       transaction.update(userDocRef, {userNumber: userCount});
     });
   });
-

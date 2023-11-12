@@ -1,54 +1,58 @@
-import './App.css';
+import { Box } from '@mui/material';
+import { User } from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import React, { useState } from 'react';
+import { MemeForm } from './Components/MemeForm';
+import { SignIn } from './Components/SignIn';
+import { TopBar } from './Components/TopBar';
+import { auth } from './firebase';
+import { CaMeme, HomePage } from './Pages/HomePage';
+import { UserProfile } from './Pages/UserProfile';
+import ProtectedRoutes from './utils/ProtectedRoutes';
 
-import logo from './logo.svg';
+export const App = () => {
+  const [memes, setMemes] = useState<CaMeme[]>([]);
+  const [, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        console.error('no user');
+      }
+    });
 
-function App() {
-  const [count, setCount] = useState(0);
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const getMemes = async () => {
+      const response = await fetch('https://api.imgflip.com/get_memes');
+      const json = await response.json();
+      setMemes(json.data.memes);
+    };
+    getMemes();
+  }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="header">
-          🚀 Vite + React + Typescript 🤘 & <br />
-          Eslint 🔥+ Prettier
-        </p>
-
-        <div className="body">
-          <button onClick={() => setCount((count) => count + 1)}>
-            🪂 Click me : {count}
-          </button>
-
-          <p> Don&apos;t forgot to install Eslint and Prettier in Your Vscode.</p>
-
-          <p>
-            Mess up the code in <code>App.tsx </code> and save the file.
-          </p>
-          <p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-            {' | '}
-            <a
-              className="App-link"
-              href="https://vitejs.dev/guide/features.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Vite Docs
-            </a>
-          </p>
-        </div>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Box sx={{ backgroundColor: '#121212' }}>
+        <TopBar />
+        <Routes>
+          <Route path="/" element={<HomePage memes={memes} />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route
+            path="/form"
+            element={
+              <ProtectedRoutes>
+                <MemeForm />
+              </ProtectedRoutes>
+            }
+          />
+          <Route path="/signin" element={<SignIn />} />
+        </Routes>
+      </Box>
+    </BrowserRouter>
   );
-}
-
-export default App;
+};

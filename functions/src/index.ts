@@ -1,5 +1,5 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 // import {onCall} from "firebase-functions/v2/https";
 //  import {onDocumentWritten} from "firebase-functions/v2/firestore";
 
@@ -19,16 +19,16 @@ admin.initializeApp();
 const firestore = admin.firestore();
 
 export const incrementUserCount = functions.firestore
-  .document("users/{userId}")
+  .document('users/{userId}')
   .onCreate(async (snap) => {
-    const countersRef = firestore.collection("counters").doc("userCount");
+    const countersRef = firestore.collection('counters').doc('userCount');
     const userDocRef = snap.ref;
     const userDoc = snap.data();
     const userCount = userDoc?.userNumber || 0;
     await firestore.runTransaction(async (transaction) => {
       const doc = await transaction.get(countersRef);
       const count = doc.exists ? doc.data()?.userNumber : 0;
-      transaction.set(countersRef, {count: count + userCount});
-      transaction.update(userDocRef, {userNumber: userCount});
+      transaction.set(countersRef, { count: count + userCount });
+      transaction.update(userDocRef, { userNumber: userCount });
     });
   });

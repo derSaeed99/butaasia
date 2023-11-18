@@ -51,14 +51,24 @@ export const SignIn = () => {
         <Grid
           item
           xs={12}
-          sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 2 }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mb: 2,
+          }}
         >
           <Typography color={"GrayText"} variant="h5">
             Sign In
           </Typography>
         </Grid>
         <Box
-          sx={{ display: "flex", justifyContent: "center", alignItems: "center", m: 2 }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            m: 2,
+          }}
         >
           <Avatar
             sx={{ width: 200, height: 200 }}
@@ -70,7 +80,11 @@ export const SignIn = () => {
         </Box>
         <Grid
           item
-          sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           <Button
             variant="contained"

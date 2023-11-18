@@ -58,8 +58,17 @@ export const HomePage = ({ memes }: HotPageProps) => {
         {memes?.map((post) => (
           <>
             <ListItem key={post.id} sx={{ borderRadius: "8px", mb: 2 }}>
-              <Grid item xs={12} sx={{ display: "flex", flexDirection: "column" }}>
-                <Grid item xs={12} display="flex" justifyContent={"space-between"}>
+              <Grid
+                item
+                xs={12}
+                sx={{ display: "flex", flexDirection: "column" }}
+              >
+                <Grid
+                  item
+                  xs={12}
+                  display="flex"
+                  justifyContent={"space-between"}
+                >
                   <ListItemText
                     sx={{
                       display: "flex",
@@ -70,7 +79,11 @@ export const HomePage = ({ memes }: HotPageProps) => {
                       mb: 2,
                     }}
                     primary={
-                      <Typography variant="h6" color={"white"} fontWeight={"bold"}>
+                      <Typography
+                        variant="h6"
+                        color={"white"}
+                        fontWeight={"bold"}
+                      >
                         {post.name}
                       </Typography>
                     }
@@ -136,7 +149,10 @@ export const HomePage = ({ memes }: HotPageProps) => {
                       >
                         <ThumbDownOffAltIcon />
                       </IconButton>
-                      <Typography variant="body1" sx={{ color: "GrayText", ml: 1 }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ color: "GrayText", ml: 1 }}
+                      >
                         {post.downvotes}
                       </Typography>
                     </Box>
@@ -144,7 +160,10 @@ export const HomePage = ({ memes }: HotPageProps) => {
                       <IconButton size="medium" sx={{ color: "GrayText" }}>
                         <ChatBubbleOutlineIcon />
                       </IconButton>
-                      <Typography variant="body1" sx={{ color: "GrayText", ml: 1 }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ color: "GrayText", ml: 1 }}
+                      >
                         {Math.floor(Math.random() * 100)}
                       </Typography>
                     </Box>
@@ -160,7 +179,10 @@ export const HomePage = ({ memes }: HotPageProps) => {
       </List>
       <Box sx={{ position: "fixed", bottom: "32px", right: "32px" }}>
         <Link to="/form">
-          <Fab sx={{ color: "purple", backgroundColor: "yellow" }} aria-label="add">
+          <Fab
+            sx={{ color: "purple", backgroundColor: "yellow" }}
+            aria-label="add"
+          >
             <AddIcon />
           </Fab>
         </Link>

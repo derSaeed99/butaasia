@@ -1,4 +1,4 @@
-module.exports = {
+module.export = {
   root: true,
   env: {
     es6: true,
@@ -11,20 +11,33 @@ module.exports = {
     "plugin:import/typescript",
     "google",
     "plugin:@typescript-eslint/recommended",
+    "prettier",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    tsconfigRootDir: __dirname,
-    project: ["tsconfig.json", "tsconfig.dev.json"],
+    project: ["functions/tsconfig.json", "functions/tsconfig.dev.json"],
+    tsconfigRootDir: __dirname + "/functions",
     sourceType: "module",
   },
-  ignorePatterns: [
-    "/lib/**/*", // Ignore built files.
-  ],
+  ignorePatterns: ["/lib/**/*"],
   plugins: ["@typescript-eslint", "import"],
   rules: {
-    "quotes": ["error", "double"],
+    quotes: ["error", "double", { avoidEscape: true }],
     "import/no-unresolved": 0,
-    "indent": ["error", 2],
+    indent: "off",
+    "require-jsdoc": "off",
+    "max-len": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "new-cap": "off",
+    "import/default": "off",
+    "import/named": "off",
+    "@typescript-eslint/camelcase": "off",
+    "no-console": "warn",
   },
 };

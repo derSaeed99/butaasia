@@ -113,7 +113,11 @@ export const TopBar = () => {
                 alignItems: "center",
               }}
             >
-              <IconButton size="medium" sx={{ color: "GrayText" }} onClick={handleClick}>
+              <IconButton
+                size="medium"
+                sx={{ color: "GrayText" }}
+                onClick={handleClick}
+              >
                 <MenuIcon />
               </IconButton>
               <Box>
@@ -121,7 +125,9 @@ export const TopBar = () => {
                   size="medium"
                   sx={{ color: "GrayText" }}
                   onClick={(event) => {
-                    user ? setAnchorEl(event.currentTarget) : navigate("/signin");
+                    user
+                      ? setAnchorEl(event.currentTarget)
+                      : navigate("/signin");
                   }}
                 >
                   <Avatar
@@ -159,7 +165,10 @@ export const TopBar = () => {
                     </IconButton>
                   </MenuItem>
                   <MenuItem>
-                    <IconButton sx={{ color: "white", m: 1 }} onClick={handleClose}>
+                    <IconButton
+                      sx={{ color: "white", m: 1 }}
+                      onClick={handleClose}
+                    >
                       <SmsIcon />
                       Messages
                     </IconButton>

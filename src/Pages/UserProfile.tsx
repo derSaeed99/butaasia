@@ -6,7 +6,12 @@ import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-mui";
 import { useEffect, useState } from "react";
 
-import { auth, createUserProfile, getAllUsers, uploadImageAndSaveUrl } from "../firebase";
+import {
+  auth,
+  createUserProfile,
+  getAllUsers,
+  uploadImageAndSaveUrl,
+} from "../firebase";
 import { subscribeToUser } from "../firebase";
 import { CaUser } from "../model";
 
@@ -118,7 +123,9 @@ export const UserProfile = () => {
   const handleSubmit = async (values: UserProfileFormValues) => {
     const profileValues = { ...values, photoUrl: avatarImage };
     try {
-      authUser && values && (await createUserProfile(authUser?.uid, profileValues));
+      authUser &&
+        values &&
+        (await createUserProfile(authUser?.uid, profileValues));
       setUserProfile(profileValues);
     } catch (e) {
       console.warn(e);

@@ -94,7 +94,10 @@ export const MemeForm = () => {
             >
               <Form style={{ color: "white" }}>
                 <Grid item>
-                  <Typography variant="body2" sx={{ color: "white", mb: 1, mt: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "white", mb: 1, mt: 1 }}
+                  >
                     Caption
                   </Typography>
                   <Field
@@ -125,8 +128,15 @@ export const MemeForm = () => {
                     InputLabelProps={{ sx: { color: "white" } }}
                   />
                 </Grid>
-                <Grid item xs={12} sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography variant="body2" sx={{ color: "white", mb: 1, mt: 1 }}>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "white", mb: 1, mt: 1 }}
+                  >
                     Category
                   </Typography>
                   <Field
@@ -197,7 +207,9 @@ export const MemeForm = () => {
                         color: "white",
                       },
                     }}
-                    inputProps={{ sx: { accept: "image/*, video/mp4, video/*, .gif" } }}
+                    inputProps={{
+                      sx: { accept: "image/*, video/mp4, video/*, .gif" },
+                    }}
                     InputLabelProps={{ sx: { color: "white" } }}
                   />
                   {image && (

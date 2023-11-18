@@ -68,14 +68,14 @@ export const getAuthenticatedUser = (): Promise<{
           resolve({ user: null, userId: null });
         }
       },
-      reject,
+      reject
     );
   });
 };
 
 export const subscribeToUser = (
   userId: string,
-  callback: (user: CaUser | null) => void,
+  callback: (user: CaUser | null) => void
 ) => {
   const userDocRef = doc(db, "users", userId);
   const unsubscribe = onSnapshot(userDocRef, (doc) => {
@@ -103,7 +103,7 @@ export const getAllUsers = async () => {
 
 export const uploadImageAndSaveUrl = async (
   userId: string,
-  imageFile: File,
+  imageFile: File
 ): Promise<string> => {
   try {
     // Get user document from Firestore
@@ -124,7 +124,7 @@ export const uploadImageAndSaveUrl = async (
 
 export const uploadMemeAndSaveUrl = async (
   userId: string,
-  imageFile: File,
+  imageFile: File
 ): Promise<string> => {
   try {
     // Upload image to Firebase Storage

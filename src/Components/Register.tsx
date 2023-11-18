@@ -17,7 +17,13 @@ export const Register = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Button
         variant="contained"
         sx={{ color: "black", backgroundColor: "white" }}

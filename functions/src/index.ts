@@ -28,7 +28,7 @@ export const incrementUserCount = functions.firestore
     await firestore.runTransaction(async (transaction) => {
       const doc = await transaction.get(countersRef);
       const count = doc.exists ? doc.data()?.userNumber : 0;
-      transaction.set(countersRef, {count: count + userCount});
-      transaction.update(userDocRef, {userNumber: userCount + count});
+      transaction.set(countersRef, { count: count + userCount });
+      transaction.update(userDocRef, { userNumber: userCount + count });
     });
   });

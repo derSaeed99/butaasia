@@ -6,10 +6,7 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["unused-imports", "simple-import-sort"],
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   rules: {
     "simple-import-sort/imports": "warn",
     "prefer-const": "warn",

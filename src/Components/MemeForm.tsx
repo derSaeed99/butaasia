@@ -1,22 +1,22 @@
 // import * as Yup from 'yup';
-import { Button, MenuItem } from '@mui/material';
-import { Box, Grid, Typography } from '@mui/material';
-import { Timestamp } from 'firebase/firestore';
-import { Field, Form, Formik } from 'formik';
-import { Select, TextField } from 'formik-mui';
-import { useState } from 'react';
+import { Button, MenuItem } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
+import { Timestamp } from "firebase/firestore";
+import { Field, Form, Formik } from "formik";
+import { Select, TextField } from "formik-mui";
+import { useState } from "react";
 
-import { auth, createCaPost } from '../firebase';
-import { CaPost } from '../model';
+import { auth, createCaPost } from "../firebase";
+import { CaPost } from "../model";
 
 const categories = [
   {
-    value: 'funny',
-    label: 'Funny',
+    value: "funny",
+    label: "Funny",
   },
   {
-    value: 'non-funny',
-    label: 'Not Funny',
+    value: "non-funny",
+    label: "Not Funny",
   },
 ];
 
@@ -44,10 +44,10 @@ export interface MemeFormValues {
 }
 
 export const MemeForm = () => {
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
   const handleSubmit = async (values: MemeFormValues) => {
     const postData: CaPost = {
-      userId: auth.currentUser?.uid || '',
+      userId: auth.currentUser?.uid || "",
       caption: values.caption,
       mediaUrl: image,
       created: Timestamp.now(),
@@ -61,9 +61,9 @@ export const MemeForm = () => {
     await createCaPost(postData);
   };
   const initialValues = {
-    caption: '',
-    category: '',
-    imageUrl: '',
+    caption: "",
+    category: "",
+    imageUrl: "",
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,14 +87,14 @@ export const MemeForm = () => {
               xs={12}
               sm={10}
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <Form style={{ color: 'white' }}>
+              <Form style={{ color: "white" }}>
                 <Grid item>
-                  <Typography variant="body2" sx={{ color: 'white', mb: 1, mt: 1 }}>
+                  <Typography variant="body2" sx={{ color: "white", mb: 1, mt: 1 }}>
                     Caption
                   </Typography>
                   <Field
@@ -103,30 +103,30 @@ export const MemeForm = () => {
                     type="text"
                     sx={{
                       mb: 2,
-                      color: 'white',
-                      border: '1px solid rgba(255, 255, 255, 0.5)',
-                      borderRadius: '10px',
-                      ':hover': {
-                        color: 'white',
-                        border: '1px solid rgba(255, 255, 255, 0)',
+                      color: "white",
+                      border: "1px solid rgba(255, 255, 255, 0.5)",
+                      borderRadius: "10px",
+                      ":hover": {
+                        color: "white",
+                        border: "1px solid rgba(255, 255, 255, 0)",
                       },
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: 'rgba(0, 0, 0, 0.23)',
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "rgba(0, 0, 0, 0.23)",
                         },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'white',
+                        "&.Mui-focused fieldset": {
+                          borderColor: "white",
                         },
                       },
-                      '& .MuiInputBase-input': {
-                        color: 'white',
+                      "& .MuiInputBase-input": {
+                        color: "white",
                       },
                     }}
-                    InputLabelProps={{ sx: { color: 'white' } }}
+                    InputLabelProps={{ sx: { color: "white" } }}
                   />
                 </Grid>
-                <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant="body2" sx={{ color: 'white', mb: 1, mt: 1 }}>
+                <Grid item xs={12} sx={{ display: "flex", flexDirection: "column" }}>
+                  <Typography variant="body2" sx={{ color: "white", mb: 1, mt: 1 }}>
                     Category
                   </Typography>
                   <Field
@@ -134,26 +134,26 @@ export const MemeForm = () => {
                     name="category"
                     sx={{
                       mb: 2,
-                      color: 'white',
-                      border: '1px solid rgba(255, 255, 255, 0.5)',
-                      borderRadius: '10px',
-                      ':hover': {
-                        color: 'white',
-                        border: '1px solid rgba(255, 255, 255, 0)',
+                      color: "white",
+                      border: "1px solid rgba(255, 255, 255, 0.5)",
+                      borderRadius: "10px",
+                      ":hover": {
+                        color: "white",
+                        border: "1px solid rgba(255, 255, 255, 0)",
                       },
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: 'rgba(0, 0, 0, 0.23)',
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "rgba(0, 0, 0, 0.23)",
                         },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'white',
+                        "&.Mui-focused fieldset": {
+                          borderColor: "white",
                         },
                       },
-                      '& .MuiInputBase-input': {
-                        color: 'white',
+                      "& .MuiInputBase-input": {
+                        color: "white",
                       },
                     }}
-                    InputLabelProps={{ sx: { color: 'white' } }}
+                    InputLabelProps={{ sx: { color: "white" } }}
                   >
                     {categories.map((category) => (
                       <MenuItem key={category.value} value={category.value}>
@@ -164,9 +164,9 @@ export const MemeForm = () => {
                 </Grid>
                 <Grid
                   sx={{
-                    display: 'flex',
+                    display: "flex",
                     gap: 2,
-                    flexDirection: 'column-reverse',
+                    flexDirection: "column-reverse",
                   }}
                   item
                 >
@@ -178,37 +178,37 @@ export const MemeForm = () => {
                     onChange={handleImageChange}
                     sx={{
                       mb: 2,
-                      color: 'white',
-                      border: '1px solid rgba(255, 255, 255, 0.5)',
-                      borderRadius: '10px',
-                      ':hover': {
-                        color: 'white',
-                        border: '1px solid rgba(255, 255, 255, 0)',
+                      color: "white",
+                      border: "1px solid rgba(255, 255, 255, 0.5)",
+                      borderRadius: "10px",
+                      ":hover": {
+                        color: "white",
+                        border: "1px solid rgba(255, 255, 255, 0)",
                       },
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: 'rgba(0, 0, 0, 0.23)',
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "rgba(0, 0, 0, 0.23)",
                         },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'white',
+                        "&.Mui-focused fieldset": {
+                          borderColor: "white",
                         },
                       },
-                      '& .MuiInputBase-input': {
-                        color: 'white',
+                      "& .MuiInputBase-input": {
+                        color: "white",
                       },
                     }}
-                    inputProps={{ sx: { accept: 'image/*, video/mp4, video/*, .gif' } }}
-                    InputLabelProps={{ sx: { color: 'white' } }}
+                    inputProps={{ sx: { accept: "image/*, video/mp4, video/*, .gif" } }}
+                    InputLabelProps={{ sx: { color: "white" } }}
                   />
                   {image && (
-                    <Box sx={{ position: 'relative', width: 200, height: 200 }}>
-                      {image.endsWith('.mp4') ? (
+                    <Box sx={{ position: "relative", width: 200, height: 200 }}>
+                      {image.endsWith(".mp4") ? (
                         <video
                           src={image}
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
                           }}
                           controls
                         >
@@ -219,20 +219,20 @@ export const MemeForm = () => {
                           src={image}
                           alt="Uploaded Meme"
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
                           }}
                         />
                       )}
                       <Box
                         sx={{
-                          position: 'absolute',
+                          position: "absolute",
                           bottom: 0,
                           left: 0,
                           right: 0,
-                          bgcolor: 'rgba(0, 0, 0, 0.5)',
-                          color: 'white',
+                          bgcolor: "rgba(0, 0, 0, 0.5)",
+                          color: "white",
                           p: 1,
                         }}
                       >
@@ -243,7 +243,7 @@ export const MemeForm = () => {
                 </Grid>
                 <Grid item>
                   <Button
-                    sx={{ backgroundColor: 'white', color: 'black' }}
+                    sx={{ backgroundColor: "white", color: "black" }}
                     variant="contained"
                     color="primary"
                     disabled={isSubmitting}

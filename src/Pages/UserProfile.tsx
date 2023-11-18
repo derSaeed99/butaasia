@@ -1,14 +1,14 @@
-import { Button } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
-import { User } from 'firebase/auth';
-import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-mui';
-import { useEffect, useState } from 'react';
+import { Button } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Grid from "@mui/material/Grid";
+import { User } from "firebase/auth";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-mui";
+import { useEffect, useState } from "react";
 
-import { auth, createUserProfile, getAllUsers, uploadImageAndSaveUrl } from '../firebase';
-import { subscribeToUser } from '../firebase';
-import { CaUser } from '../model';
+import { auth, createUserProfile, getAllUsers, uploadImageAndSaveUrl } from "../firebase";
+import { subscribeToUser } from "../firebase";
+import { CaUser } from "../model";
 
 interface UserProfileFormValues {
   userName: string;
@@ -27,12 +27,12 @@ interface AvatarInputProps {
 }
 
 const AvatarInput = ({ name, value, onChange, userId }: AvatarInputProps) => {
-  const [avatarImage, setAvatarImage] = useState<string>('');
+  const [avatarImage, setAvatarImage] = useState<string>("");
 
   const handleAvatarClick = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
@@ -66,12 +66,12 @@ export const UserProfile = () => {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [length, setLength] = useState<number>(0);
   const [userProfile, setUserProfile] = useState<CaUser | null>();
-  const [avatarImage, setAvatarImage] = useState<string>('');
+  const [avatarImage, setAvatarImage] = useState<string>("");
   const [initialValues, setInitialValues] = useState<UserProfileFormValues>({
-    userName: userProfile?.userName || '',
+    userName: userProfile?.userName || "",
     userNumber: userProfile?.userNumber || 0,
-    photoUrl: userProfile?.photoUrl || '',
-    bio: userProfile?.bio || '',
+    photoUrl: userProfile?.photoUrl || "",
+    bio: userProfile?.bio || "",
     created: new Date(),
     lastUpdate: new Date(),
   });
@@ -84,7 +84,7 @@ export const UserProfile = () => {
           setUserProfile(profile);
         });
       } else {
-        console.error('no user');
+        console.error("no user");
       }
     });
 
@@ -105,10 +105,10 @@ export const UserProfile = () => {
   useEffect(() => {
     if (userProfile) {
       setInitialValues({
-        userName: userProfile.userName || '',
+        userName: userProfile.userName || "",
         userNumber: userCount,
-        photoUrl: userProfile.photoUrl || '',
-        bio: userProfile.bio || '',
+        photoUrl: userProfile.photoUrl || "",
+        bio: userProfile.bio || "",
         created: new Date(),
         lastUpdate: new Date(),
       });
@@ -144,7 +144,7 @@ export const UserProfile = () => {
             <Grid item sx={{ m: 2 }}>
               <Field
                 name="photoUrl"
-                userId={authUser?.uid || ''}
+                userId={authUser?.uid || ""}
                 component={AvatarInput}
                 value={values.photoUrl || avatarImage}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,26 +156,26 @@ export const UserProfile = () => {
               <Field
                 sx={{
                   mb: 2,
-                  color: 'white',
-                  border: '1px solid rgba(255, 255, 255, 0.5)',
-                  borderRadius: '10px',
-                  ':hover': {
-                    color: 'white',
-                    border: '1px solid rgba(255, 255, 255, 0)',
+                  color: "white",
+                  border: "1px solid rgba(255, 255, 255, 0.5)",
+                  borderRadius: "10px",
+                  ":hover": {
+                    color: "white",
+                    border: "1px solid rgba(255, 255, 255, 0)",
                   },
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'rgba(0, 0, 0, 0.23)',
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "rgba(0, 0, 0, 0.23)",
                     },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'white',
+                    "&.Mui-focused fieldset": {
+                      borderColor: "white",
                     },
                   },
-                  '& .MuiInputBase-input': {
-                    color: 'white',
+                  "& .MuiInputBase-input": {
+                    color: "white",
                   },
                 }}
-                InputLabelProps={{ sx: { color: 'white' } }}
+                InputLabelProps={{ sx: { color: "white" } }}
                 name="userName"
                 component={TextField}
                 label="Username"
@@ -185,26 +185,26 @@ export const UserProfile = () => {
               <Field
                 sx={{
                   mb: 2,
-                  color: 'white',
-                  border: '1px solid rgba(255, 255, 255, 0.5)',
-                  borderRadius: '10px',
-                  ':hover': {
-                    color: 'white',
-                    border: '1px solid rgba(255, 255, 255, 0)',
+                  color: "white",
+                  border: "1px solid rgba(255, 255, 255, 0.5)",
+                  borderRadius: "10px",
+                  ":hover": {
+                    color: "white",
+                    border: "1px solid rgba(255, 255, 255, 0)",
                   },
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'rgba(0, 0, 0, 0.23)',
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "rgba(0, 0, 0, 0.23)",
                     },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'white',
+                    "&.Mui-focused fieldset": {
+                      borderColor: "white",
                     },
                   },
-                  '& .MuiInputBase-input': {
-                    color: 'white',
+                  "& .MuiInputBase-input": {
+                    color: "white",
                   },
                 }}
-                InputLabelProps={{ sx: { color: 'white' } }}
+                InputLabelProps={{ sx: { color: "white" } }}
                 name="bio"
                 component={TextField}
                 label="Description"

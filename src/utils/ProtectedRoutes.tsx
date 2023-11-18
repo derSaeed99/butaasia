@@ -1,6 +1,6 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
-import { auth } from '../firebase';
+import { auth } from "../firebase";
 
 interface PrivateRouteProps {
   children: React.ReactElement;

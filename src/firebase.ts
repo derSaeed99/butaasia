@@ -1,5 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -13,10 +13,10 @@ import {
   query,
   setDoc,
   updateDoc,
-} from 'firebase/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+} from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-import { CaPost, CaUser } from './model';
+import { CaPost, CaUser } from "./model";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -36,19 +36,19 @@ export const storage = getStorage(app);
 // const analytics = getAnalytics(app);
 export const createCaPost = async (caPost: CaPost) => {
   try {
-    const caPostCollectionRef = collection(db, 'posts');
+    const caPostCollectionRef = collection(db, "posts");
     await addDoc(caPostCollectionRef, caPost);
   } catch (error) {
-    console.error('Error adding CaPost: ', error);
+    console.error("Error adding CaPost: ", error);
   }
 };
 
 export const createUserProfile = async (userId: string, user: CaUser) => {
   try {
-    const userProfileDocRef = doc(collection(db, 'users'), userId);
+    const userProfileDocRef = doc(collection(db, "users"), userId);
     await setDoc(userProfileDocRef, user, { merge: true });
   } catch (error) {
-    console.error('Error adding UserProfile: ', error);
+    console.error("Error adding UserProfile: ", error);
   }
 };
 
@@ -77,7 +77,7 @@ export const subscribeToUser = (
   userId: string,
   callback: (user: CaUser | null) => void,
 ) => {
-  const userDocRef = doc(db, 'users', userId);
+  const userDocRef = doc(db, "users", userId);
   const unsubscribe = onSnapshot(userDocRef, (doc) => {
     if (doc.exists()) {
       const user = doc.data() as CaUser;
@@ -91,12 +91,12 @@ export const subscribeToUser = (
 
 export const getAllUsers = async () => {
   try {
-    const usersCollectionRef = collection(db, 'users');
+    const usersCollectionRef = collection(db, "users");
     const usersSnapshot = await getDocs(usersCollectionRef);
     const users = usersSnapshot.docs.map((doc) => doc.data());
     return users;
   } catch (error) {
-    console.error('Error getting all users: ', error);
+    console.error("Error getting all users: ", error);
     throw error;
   }
 };
@@ -107,7 +107,7 @@ export const uploadImageAndSaveUrl = async (
 ): Promise<string> => {
   try {
     // Get user document from Firestore
-    const userDocRef = doc(db, 'users', userId);
+    const userDocRef = doc(db, "users", userId);
     const storageRef = ref(storage, `images/${userId}/photoUrl.jpg`);
     await uploadBytes(storageRef, imageFile);
     // Get download URL for the uploaded image
@@ -117,7 +117,7 @@ export const uploadImageAndSaveUrl = async (
     // Return download URL
     return downloadUrl;
   } catch (error) {
-    console.error('Error uploading image and saving URL: ', error);
+    console.error("Error uploading image and saving URL: ", error);
     throw error;
   }
 };
@@ -135,13 +135,13 @@ export const uploadMemeAndSaveUrl = async (
     const downloadUrl = await getDownloadURL(storageRef);
 
     // Save download URL to user document in Firestore
-    const memeDocRef = doc(db, 'memes', userId);
+    const memeDocRef = doc(db, "memes", userId);
     await updateDoc(memeDocRef, { imageUrl: downloadUrl });
 
     // Return download URL
     return downloadUrl;
   } catch (error) {
-    console.error('Error uploading image and saving URL: ', error);
+    console.error("Error uploading image and saving URL: ", error);
     throw error;
   }
 };
@@ -151,7 +151,7 @@ export const checkUserProfile = async (): Promise<boolean> => {
   if (!currentUser) {
     return false;
   }
-  const profileDocRef = doc(db, 'users', currentUser.uid);
+  const profileDocRef = doc(db, "users", currentUser.uid);
   const profileDoc = await getDoc(profileDocRef);
   return profileDoc.exists();
 };
@@ -181,8 +181,8 @@ export const checkUserProfile = async (): Promise<boolean> => {
 // });
 
 export const subscribeToMemes = (callback: (posts: CaPost[]) => void) => {
-  const memesCollectionRef = collection(db, 'posts');
-  const memesQuery = query(memesCollectionRef, orderBy('date'), limit(20));
+  const memesCollectionRef = collection(db, "posts");
+  const memesQuery = query(memesCollectionRef, orderBy("date"), limit(20));
   return onSnapshot(memesQuery, (snapshot) => {
     const memes = snapshot.docs.map((doc) => ({
       postId: doc.id,

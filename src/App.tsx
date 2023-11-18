@@ -1,16 +1,16 @@
-import { Box } from '@mui/material';
-import { User } from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Box } from "@mui/material";
+import { User } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { MemeForm } from './Components/MemeForm';
-import { SignIn } from './Components/SignIn';
-import { TopBar } from './Components/TopBar';
-import { auth } from './firebase';
-import { CaMeme } from './model';
-import { HomePage } from './Pages/HomePage';
-import { UserProfile } from './Pages/UserProfile';
-import ProtectedRoutes from './utils/ProtectedRoutes';
+import { MemeForm } from "./Components/MemeForm";
+import { SignIn } from "./Components/SignIn";
+import { TopBar } from "./Components/TopBar";
+import { auth } from "./firebase";
+import { CaMeme } from "./model";
+import { HomePage } from "./Pages/HomePage";
+import { UserProfile } from "./Pages/UserProfile";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 export const App = () => {
   const [memes, setMemes] = useState<CaMeme[]>([]);
@@ -20,7 +20,7 @@ export const App = () => {
       if (user) {
         setUser(user);
       } else {
-        console.error('no user');
+        console.error("no user");
       }
     });
 
@@ -29,7 +29,7 @@ export const App = () => {
 
   useEffect(() => {
     const getMemes = async () => {
-      const response = await fetch('https://api.imgflip.com/get_memes');
+      const response = await fetch("https://api.imgflip.com/get_memes");
       const json = await response.json();
       setMemes(json.data.memes);
     };
@@ -38,7 +38,7 @@ export const App = () => {
 
   return (
     <BrowserRouter>
-      <Box sx={{ backgroundColor: '#121212' }}>
+      <Box sx={{ backgroundColor: "#121212" }}>
         <TopBar />
         <Routes>
           <Route path="/" element={<HomePage memes={memes} />} />

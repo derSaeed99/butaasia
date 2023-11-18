@@ -1,8 +1,8 @@
-import { MoreVert } from '@mui/icons-material';
-import AddIcon from '@mui/icons-material/Add';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import { MoreVert } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import {
   Box,
   CardMedia,
@@ -14,11 +14,11 @@ import {
   ListItem,
   ListItemText,
   Typography,
-} from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 
-import { auth } from '../firebase';
-import { CaMeme } from '../model';
+import { auth } from "../firebase";
+import { CaMeme } from "../model";
 
 interface HotPageProps {
   memes?: CaMeme[];
@@ -28,56 +28,56 @@ export const HomePage = ({ memes }: HotPageProps) => {
   const navigate = useNavigate();
   const handleUpvote = () => {
     if (auth) {
-      navigate('/signin');
+      navigate("/signin");
     }
-    console.log('upvote');
+    console.log("upvote");
   };
   const handleDownVote = () => {
     if (auth) {
-      navigate('/signin');
+      navigate("/signin");
     }
-    console.log('downvote');
+    console.log("downvote");
   };
   const handleMoreVert = () => {
     if (auth) {
-      navigate('/signin');
+      navigate("/signin");
     }
-    console.log('report post');
+    console.log("report post");
   };
   return (
     <Grid
       container
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
       }}
     >
       <List>
         {memes?.map((post) => (
           <>
-            <ListItem key={post.id} sx={{ borderRadius: '8px', mb: 2 }}>
-              <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Grid item xs={12} display="flex" justifyContent={'space-between'}>
+            <ListItem key={post.id} sx={{ borderRadius: "8px", mb: 2 }}>
+              <Grid item xs={12} sx={{ display: "flex", flexDirection: "column" }}>
+                <Grid item xs={12} display="flex" justifyContent={"space-between"}>
                   <ListItemText
                     sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                       mt: 2,
                       mb: 2,
                     }}
                     primary={
-                      <Typography variant="h6" color={'white'} fontWeight={'bold'}>
+                      <Typography variant="h6" color={"white"} fontWeight={"bold"}>
                         {post.name}
                       </Typography>
                     }
                     secondary={
                       <IconButton
                         size="small"
-                        sx={{ color: 'GrayText' }}
+                        sx={{ color: "GrayText" }}
                         onClick={handleMoreVert}
                       >
                         <MoreVert />
@@ -89,9 +89,9 @@ export const HomePage = ({ memes }: HotPageProps) => {
                   item
                   xs={12}
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
                   <CardMedia
@@ -99,52 +99,52 @@ export const HomePage = ({ memes }: HotPageProps) => {
                     src={post.url}
                     alt={post.name}
                     style={{
-                      width: '100%',
+                      width: "100%",
                       height: `${post.height}px`,
-                      objectFit: 'contain',
+                      objectFit: "contain",
                     }}
-                    sx={{ maxHeight: '45vh', p: 0, m: 0 }}
+                    sx={{ maxHeight: "45vh", p: 0, m: 0 }}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <Box
                     sx={{
-                      display: 'flex',
-                      alignItems: 'center',
+                      display: "flex",
+                      alignItems: "center",
                       mt: 2,
                       mb: 2,
-                      justifyContent: 'flex-start',
+                      justifyContent: "flex-start",
                     }}
                   >
                     <IconButton
                       size="medium"
-                      sx={{ color: 'GrayText' }}
+                      sx={{ color: "GrayText" }}
                       onClick={handleUpvote}
                     >
                       <ThumbUpOffAltIcon />
                     </IconButton>
                     <Box>
-                      <Typography variant="body1" sx={{ color: 'GrayText' }}>
+                      <Typography variant="body1" sx={{ color: "GrayText" }}>
                         {post.upvotes}
                       </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
                       <IconButton
                         size="medium"
-                        sx={{ color: 'GrayText' }}
+                        sx={{ color: "GrayText" }}
                         onClick={handleDownVote}
                       >
                         <ThumbDownOffAltIcon />
                       </IconButton>
-                      <Typography variant="body1" sx={{ color: 'GrayText', ml: 1 }}>
+                      <Typography variant="body1" sx={{ color: "GrayText", ml: 1 }}>
                         {post.downvotes}
                       </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-                      <IconButton size="medium" sx={{ color: 'GrayText' }}>
+                    <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
+                      <IconButton size="medium" sx={{ color: "GrayText" }}>
                         <ChatBubbleOutlineIcon />
                       </IconButton>
-                      <Typography variant="body1" sx={{ color: 'GrayText', ml: 1 }}>
+                      <Typography variant="body1" sx={{ color: "GrayText", ml: 1 }}>
                         {Math.floor(Math.random() * 100)}
                       </Typography>
                     </Box>
@@ -153,14 +153,14 @@ export const HomePage = ({ memes }: HotPageProps) => {
               </Grid>
             </ListItem>
             <Grid item xs={12}>
-              <Divider sx={{ mt: 2, mb: 2, borderColor: 'GrayText' }} />
+              <Divider sx={{ mt: 2, mb: 2, borderColor: "GrayText" }} />
             </Grid>
           </>
         ))}
       </List>
-      <Box sx={{ position: 'fixed', bottom: '32px', right: '32px' }}>
+      <Box sx={{ position: "fixed", bottom: "32px", right: "32px" }}>
         <Link to="/form">
-          <Fab sx={{ color: 'purple', backgroundColor: 'yellow' }} aria-label="add">
+          <Fab sx={{ color: "purple", backgroundColor: "yellow" }} aria-label="add">
             <AddIcon />
           </Fab>
         </Link>

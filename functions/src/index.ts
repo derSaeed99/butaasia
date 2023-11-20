@@ -1,7 +1,8 @@
 import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
+import { initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 // import {onCall} from "firebase-functions/v2/https";
-//  import {onDocumentWritten} from "firebase-functions/v2/firestore";
+// import {onDocumentWritten} from "firebase-functions/v2/firestore";
 
 // import {onRequest} from "firebase-functions/v2/https";
 // import * as logger from "firebase-functions/logger";
@@ -13,22 +14,27 @@ import * as admin from "firebase-admin";
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // })
-
-admin.initializeApp();
-
-const firestore = admin.firestore();
+initializeApp()
+const firestore = getFirestore();
 
 export const incrementUserCount = functions.firestore
-  .document("users/{userId}")
-  .onCreate(async (snap) => {
-    const countersRef = firestore.collection("counters").doc("userCount");
-    const userDocRef = snap.ref;
-    const userDoc = snap.data();
-    const userCount = userDoc?.userNumber || 0;
-    await firestore.runTransaction(async (transaction) => {
-      const doc = await transaction.get(countersRef);
-      const count = doc.exists ? doc.data()?.userNumber : 0;
-      transaction.set(countersRef, { count: count + userCount });
-      transaction.update(userDocRef, { userNumber: userCount + count });
+    .document("users/{userId}")
+    .onCreate(async (snap) => {
+      const countersRef = firestore.collection("counters").doc("userCount");
+      const userDocRef = snap.ref;
+      const userDoc = snap.data();
+      const userCount = userDoc?.userNumber || 0;
+
+      try {
+        await firestore.runTransaction(async (transaction) => {
+          const doc = await transaction.get(countersRef);
+          const count = doc.exists ? doc.data()?.count || 0 : 0;
+          const newCount = count + userCount;
+console.log("newCount", newCount, count)
+          transaction.set(countersRef, {count: newCount});
+          transaction.update(userDocRef, {userNumber: newCount});
+        });
+      } catch (error) {
+        console.error("Error updating user count:", error);
+      }
     });
-  });

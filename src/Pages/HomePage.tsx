@@ -18,10 +18,10 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 
 import { auth } from "../firebase";
-import { CaMeme } from "../model";
+import { CaMeme, CaPost } from "../model";
 
 interface HotPageProps {
-  memes?: CaMeme[];
+  memes?: CaPost[];
 }
 
 export const HomePage = ({ memes }: HotPageProps) => {
@@ -57,7 +57,7 @@ export const HomePage = ({ memes }: HotPageProps) => {
       <List>
         {memes?.map((post) => (
           <>
-            <ListItem key={post.id} sx={{ borderRadius: "8px", mb: 2 }}>
+            <ListItem key={post.postId} sx={{ borderRadius: "8px", mb: 2 }}>
               <Grid
                 item
                 xs={12}
@@ -84,7 +84,7 @@ export const HomePage = ({ memes }: HotPageProps) => {
                         color={"white"}
                         fontWeight={"bold"}
                       >
-                        {post.name}
+                        {post.caption}
                       </Typography>
                     }
                     secondary={
@@ -109,11 +109,10 @@ export const HomePage = ({ memes }: HotPageProps) => {
                 >
                   <CardMedia
                     component="img"
-                    src={post.url}
-                    alt={post.name}
+                    src={post.mediaUrl}
+                    alt={post.caption}
                     style={{
                       width: "100%",
-                      height: `${post.height}px`,
                       objectFit: "contain",
                     }}
                     sx={{ maxHeight: "45vh", p: 0, m: 0 }}

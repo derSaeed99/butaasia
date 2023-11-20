@@ -33,15 +33,6 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-// const analytics = getAnalytics(app);
-export const createCaPost = async (caPost: CaPost) => {
-  try {
-    const caPostCollectionRef = collection(db, "posts");
-    await addDoc(caPostCollectionRef, caPost);
-  } catch (error) {
-    console.error("Error adding CaPost: ", error);
-  }
-};
 
 export const createUserProfile = async (userId: string, user: CaUser) => {
   try {
@@ -106,15 +97,11 @@ export const uploadImageAndSaveUrl = async (
   imageFile: File
 ): Promise<string> => {
   try {
-    // Get user document from Firestore
     const userDocRef = doc(db, "users", userId);
     const storageRef = ref(storage, `images/${userId}/photoUrl.jpg`);
     await uploadBytes(storageRef, imageFile);
-    // Get download URL for the uploaded image
     const downloadUrl = await getDownloadURL(storageRef);
-    // Save download URL to user document in Firestore
     await setDoc(userDocRef, { photoUrl: downloadUrl });
-    // Return download URL
     return downloadUrl;
   } catch (error) {
     console.error("Error uploading image and saving URL: ", error);
@@ -123,22 +110,25 @@ export const uploadImageAndSaveUrl = async (
 };
 
 export const uploadMemeAndSaveUrl = async (
-  userId: string,
-  imageFile: File
+  imageFile: File,
+  post: CaPost
 ): Promise<string> => {
   try {
-    // Upload image to Firebase Storage
-    const storageRef = ref(storage, `images/${userId}/${imageFile.name}`);
-    await uploadBytes(storageRef, imageFile);
-
-    // Get download URL for the uploaded image
+    const newRef = ref(storage);
+    const imageId = doc(collection(db, "memes")).id;
+    const storageRef = ref(
+      storage,
+      `memes/${imageId}/${post.caption}.jpg`
+    );
+    if (post.mediaUrl) {
+      await uploadBytes(storageRef, imageFile);
+    }
     const downloadUrl = await getDownloadURL(storageRef);
-
-    // Save download URL to user document in Firestore
-    const memeDocRef = doc(db, "memes", userId);
-    await updateDoc(memeDocRef, { imageUrl: downloadUrl });
-
-    // Return download URL
+    await setDoc(
+      doc(db, "posts", `${imageId}`),
+      { ...post, mediaUrl: downloadUrl, postId: imageId },
+      { merge: true }
+    );
     return downloadUrl;
   } catch (error) {
     console.error("Error uploading image and saving URL: ", error);
@@ -156,38 +146,21 @@ export const checkUserProfile = async (): Promise<boolean> => {
   return profileDoc.exists();
 };
 
-// Increment counter every time a new user logs in
-// export const incrementUserCount = async (): Promise<number> => {
-//   const counterDocRef = doc(db, 'counters', 'userCount');
-//   const counterDoc = await getDoc(counterDocRef);
-//   const currentCount = counterDoc.data()?.count || 0;
-//   const currentUser = auth.currentUser;
-//   if (currentUser && !counterDoc.data()?.users[currentUser.uid]) {
-//     await updateDoc(counterDocRef, {
-//       count: increment(1),
-//     });
-//     return currentCount + 1;
-//   }
-//   return currentCount;
-// };
-
-// let isFirstLoad = true;
-
-// onAuthStateChanged(auth, async (user: User | null) => {
-//   if (user && isFirstLoad) {
-//     await incrementUserCount();
-//     isFirstLoad = false;
-//   }
-// });
-
-export const subscribeToMemes = (callback: (posts: CaPost[]) => void) => {
+export const subscribeToMemes = (
+  callback: (posts: CaPost[]) => void
+) => {
   const memesCollectionRef = collection(db, "posts");
-  const memesQuery = query(memesCollectionRef, orderBy("date"), limit(20));
+  const memesQuery = query(
+    memesCollectionRef,
+    orderBy("created"),
+    limit(20)
+  );
   return onSnapshot(memesQuery, (snapshot) => {
     const memes = snapshot.docs.map((doc) => ({
       postId: doc.id,
       ...(doc.data() as CaPost),
     }));
     callback(memes);
+    console.log(memes);
   });
 };

@@ -17,6 +17,9 @@ export const SignIn = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
+      if (user) {
+        navigate("/");
+      }
     });
 
     return unsubscribe;

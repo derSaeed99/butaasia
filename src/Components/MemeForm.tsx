@@ -4,9 +4,9 @@ import { Box, Grid, Typography } from "@mui/material";
 import { Timestamp } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
 import { Select, TextField } from "formik-mui";
-import { useState } from "react";
+import {  useState } from "react";
 
-import { auth, createCaPost } from "../firebase";
+import { auth, uploadMemeAndSaveUrl } from "../firebase";
 import { CaPost } from "../model";
 
 const categories = [
@@ -44,12 +44,13 @@ export interface MemeFormValues {
 }
 
 export const MemeForm = () => {
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File>();
+  const [imageUrl, setImageUrl] = useState<string>();
   const handleSubmit = async (values: MemeFormValues) => {
     const postData: CaPost = {
       userId: auth.currentUser?.uid || "",
       caption: values.caption,
-      mediaUrl: image,
+      mediaUrl: imageUrl || "",
       created: Timestamp.now(),
       category: values.category,
       upvotes: 0,
@@ -57,9 +58,10 @@ export const MemeForm = () => {
       commentsCount: 0,
       comments: [],
     };
-    console.log(postData);
-    await createCaPost(postData);
+    if(image){
+    await uploadMemeAndSaveUrl(image, postData)
   };
+};
   const initialValues = {
     caption: "",
     category: "",
@@ -69,10 +71,12 @@ export const MemeForm = () => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
+      const url = URL.createObjectURL(file);
+      setImageUrl(url)
+      setImage(file);
     }
   };
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Formik
@@ -214,9 +218,9 @@ export const MemeForm = () => {
                   />
                   {image && (
                     <Box sx={{ position: "relative", width: 200, height: 200 }}>
-                      {image.endsWith(".mp4") ? (
+                      {imageUrl?.endsWith(".mp4") ? (
                         <video
-                          src={image}
+                          src={imageUrl}
                           style={{
                             width: "100%",
                             height: "100%",
@@ -228,7 +232,7 @@ export const MemeForm = () => {
                         </video>
                       ) : (
                         <img
-                          src={image}
+                          src={imageUrl}
                           alt="Uploaded Meme"
                           style={{
                             width: "100%",

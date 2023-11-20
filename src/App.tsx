@@ -1,20 +1,22 @@
 import { Box } from "@mui/material";
 import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 
 import { MemeForm } from "./Components/MemeForm";
 import { SignIn } from "./Components/SignIn";
 import { TopBar } from "./Components/TopBar";
-import { auth } from "./firebase";
-import { CaMeme } from "./model";
+import { auth, subscribeToMemes } from "./firebase";
+import { CaMeme, CaPost } from "./model";
 import { HomePage } from "./Pages/HomePage";
 import { UserProfile } from "./Pages/UserProfile";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 export const App = () => {
-  const [memes, setMemes] = useState<CaMeme[]>([]);
-  const [, setUser] = useState<User | null>(null);
+  const [memes, setMemes] = useState<CaPost[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -23,37 +25,42 @@ export const App = () => {
         console.error("no user");
       }
     });
+    const unsubscribeToMemes = subscribeToMemes((memes) => {
+      if (memes) {
+        setMemes(memes);
+      } else {
+        console.error("no user");
+      }
+    });
 
-    return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    const getMemes = async () => {
-      const response = await fetch("https://api.imgflip.com/get_memes");
-      const json = await response.json();
-      setMemes(json.data.memes);
+    return () => { 
+      unsubscribe();
+      unsubscribeToMemes();
     };
-    getMemes();
-  }, []);
+  }, [navigate]);
 
   return (
-    <BrowserRouter>
       <Box sx={{ backgroundColor: "#121212" }}>
         <TopBar />
         <Routes>
+          <Route path="/signin" element={<SignIn />} />
           <Route path="/" element={<HomePage memes={memes} />} />
-          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/profile" 
+          element={
+          <ProtectedRoutes user={user}>
+          <UserProfile />
+          </ProtectedRoutes>
+          } 
+          />
           <Route
             path="/form"
             element={
-              <ProtectedRoutes>
-                <MemeForm />
-              </ProtectedRoutes>
+                <ProtectedRoutes user={user}>
+                  <MemeForm />
+                </ProtectedRoutes>
             }
           />
-          <Route path="/signin" element={<SignIn />} />
         </Routes>
       </Box>
-    </BrowserRouter>
   );
 };

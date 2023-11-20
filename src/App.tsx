@@ -33,34 +33,35 @@ export const App = () => {
       }
     });
 
-    return () => { 
+    return () => {
       unsubscribe();
       unsubscribeToMemes();
     };
   }, [navigate]);
 
   return (
-      <Box sx={{ backgroundColor: "#121212" }}>
-        <TopBar />
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/" element={<HomePage memes={memes} />} />
-          <Route path="/profile" 
+    <Box sx={{ backgroundColor: "#121212" }}>
+      <TopBar />
+      <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/" element={<HomePage memes={memes} />} />
+        <Route
+          path="/profile"
           element={
-          <ProtectedRoutes user={user}>
-          <UserProfile />
-          </ProtectedRoutes>
-          } 
-          />
-          <Route
-            path="/form"
-            element={
-                <ProtectedRoutes user={user}>
-                  <MemeForm />
-                </ProtectedRoutes>
-            }
-          />
-        </Routes>
-      </Box>
+            <ProtectedRoutes user={user}>
+              <UserProfile />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/form"
+          element={
+            <ProtectedRoutes user={user}>
+              <MemeForm />
+            </ProtectedRoutes>
+          }
+        />
+      </Routes>
+    </Box>
   );
 };

@@ -4,7 +4,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import { Timestamp } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
 import { Select, TextField } from "formik-mui";
-import {  useState } from "react";
+import { useState } from "react";
 
 import { auth, uploadMemeAndSaveUrl } from "../firebase";
 import { CaPost } from "../model";
@@ -58,10 +58,10 @@ export const MemeForm = () => {
       commentsCount: 0,
       comments: [],
     };
-    if(image){
-    await uploadMemeAndSaveUrl(image, postData)
+    if (image) {
+      await uploadMemeAndSaveUrl(image, postData);
+    }
   };
-};
   const initialValues = {
     caption: "",
     category: "",
@@ -72,11 +72,11 @@ export const MemeForm = () => {
     const file = event.target.files?.[0];
     if (file) {
       const url = URL.createObjectURL(file);
-      setImageUrl(url)
+      setImageUrl(url);
       setImage(file);
     }
   };
-  
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Formik

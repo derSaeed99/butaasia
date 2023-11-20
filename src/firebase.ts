@@ -116,10 +116,7 @@ export const uploadMemeAndSaveUrl = async (
   try {
     const newRef = ref(storage);
     const imageId = doc(collection(db, "memes")).id;
-    const storageRef = ref(
-      storage,
-      `memes/${imageId}/${post.caption}.jpg`
-    );
+    const storageRef = ref(storage, `memes/${imageId}/${post.caption}.jpg`);
     if (post.mediaUrl) {
       await uploadBytes(storageRef, imageFile);
     }
@@ -146,15 +143,9 @@ export const checkUserProfile = async (): Promise<boolean> => {
   return profileDoc.exists();
 };
 
-export const subscribeToMemes = (
-  callback: (posts: CaPost[]) => void
-) => {
+export const subscribeToMemes = (callback: (posts: CaPost[]) => void) => {
   const memesCollectionRef = collection(db, "posts");
-  const memesQuery = query(
-    memesCollectionRef,
-    orderBy("created"),
-    limit(20)
-  );
+  const memesQuery = query(memesCollectionRef, orderBy("created"), limit(20));
   return onSnapshot(memesQuery, (snapshot) => {
     const memes = snapshot.docs.map((doc) => ({
       postId: doc.id,

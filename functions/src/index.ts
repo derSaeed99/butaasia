@@ -14,27 +14,27 @@ import { getFirestore } from "firebase-admin/firestore";
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // })
-initializeApp()
+initializeApp();
 const firestore = getFirestore();
 
 export const incrementUserCount = functions.firestore
-    .document("users/{userId}")
-    .onCreate(async (snap) => {
-      const countersRef = firestore.collection("counters").doc("userCount");
-      const userDocRef = snap.ref;
-      const userDoc = snap.data();
-      const userCount = userDoc?.userNumber || 0;
+  .document("users/{userId}")
+  .onCreate(async (snap) => {
+    const countersRef = firestore.collection("counters").doc("userCount");
+    const userDocRef = snap.ref;
+    const userDoc = snap.data();
+    const userCount = userDoc?.userNumber || 0;
 
-      try {
-        await firestore.runTransaction(async (transaction) => {
-          const doc = await transaction.get(countersRef);
-          const count = doc.exists ? doc.data()?.count || 0 : 0;
-          const newCount = count + userCount;
-console.log("newCount", newCount, count)
-          transaction.set(countersRef, {count: newCount});
-          transaction.update(userDocRef, {userNumber: newCount});
-        });
-      } catch (error) {
-        console.error("Error updating user count:", error);
-      }
-    });
+    try {
+      await firestore.runTransaction(async (transaction) => {
+        const doc = await transaction.get(countersRef);
+        const count = doc.exists ? doc.data()?.count || 0 : 0;
+        const newCount = count + userCount;
+        console.log("newCount", newCount, count);
+        transaction.set(countersRef, { count: newCount });
+        transaction.update(userDocRef, { userNumber: newCount });
+      });
+    } catch (error) {
+      console.error("Error updating user count:", error);
+    }
+  });

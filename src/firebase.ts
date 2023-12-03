@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import {
-  addDoc,
   collection,
   doc,
+  FirestoreError,
   getDoc,
   getDocs,
   getFirestore,
@@ -12,7 +12,7 @@ import {
   orderBy,
   query,
   setDoc,
-  updateDoc,
+  where,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -64,20 +64,24 @@ export const getAuthenticatedUser = (): Promise<{
   });
 };
 
-export const subscribeToUser = (
+export const subscribeToUser = ({
+  userId,
+  observer,
+  onError
+}: {
   userId: string,
-  callback: (user: CaUser | null) => void
-) => {
-  const userDocRef = doc(db, "users", userId);
-  const unsubscribe = onSnapshot(userDocRef, (doc) => {
-    if (doc.exists()) {
-      const user = doc.data() as CaUser;
-      callback(user);
-    } else {
-      callback(null);
-    }
-  });
-  return unsubscribe;
+  observer: (user: CaUser | null) => void,
+  onError?: (error: FirestoreError) => void
+}) => {
+ return onSnapshot(
+  query(
+    collection(db, "users"),
+    where("userId", "==", userId)), (snapshot) => {
+      const user = snapshot.docs[0]?.data() as CaUser;
+      observer(user);
+    },
+    onError
+    );
 };
 
 export const getAllUsers = async () => {
@@ -114,7 +118,7 @@ export const uploadMemeAndSaveUrl = async (
   post: CaPost
 ): Promise<string> => {
   try {
-    const newRef = ref(storage);
+    ref(storage);
     const imageId = doc(collection(db, "memes")).id;
     const storageRef = ref(storage, `memes/${imageId}/${post.caption}.jpg`);
     if (post.mediaUrl) {
@@ -152,6 +156,5 @@ export const subscribeToMemes = (callback: (posts: CaPost[]) => void) => {
       ...(doc.data() as CaPost),
     }));
     callback(memes);
-    console.log(memes);
   });
 };

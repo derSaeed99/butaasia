@@ -5,11 +5,11 @@ import { User } from "firebase/auth";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-mui";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   auth,
   createUserProfile,
-  getAllUsers,
   uploadImageAndSaveUrl,
 } from "../firebase";
 import { subscribeToUser } from "../firebase";
@@ -69,9 +69,10 @@ const AvatarInput = ({ name, value, onChange, userId }: AvatarInputProps) => {
 
 export const UserProfile = () => {
   const [authUser, setAuthUser] = useState<User | null>(null);
-  const [length, setLength] = useState<number>(0);
-  const [userProfile, setUserProfile] = useState<CaUser | null>();
+  const [userProfile, setUserProfile] = useState<CaUser | null>(null);
   const [avatarImage, setAvatarImage] = useState<string>("");
+const navigate = useNavigate();
+
   const [initialValues, setInitialValues] = useState<UserProfileFormValues>({
     userName: userProfile?.userName || "",
     userNumber: userProfile?.userNumber || 0,
@@ -85,51 +86,51 @@ export const UserProfile = () => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setAuthUser(user);
-        subscribeToUser(user.uid, (profile) => {
-          setUserProfile(profile);
-        });
       } else {
         console.error("no user");
       }
+      const unsubscribeToUserProfile = subscribeToUser({
+        userId: user?.uid ?? "",
+        observer: (profile: React.SetStateAction<CaUser | null>) => {
+          setUserProfile(profile);
+        },
+        onError: (error) => {
+          setUserProfile(null)
+          console.error(error);
+        }
+      })
+      return ()=>{
+        unsubscribe()
+        unsubscribeToUserProfile()
+      };
     });
 
-    return unsubscribe;
   }, []);
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const users = await getAllUsers();
-      if (users) {
-        setLength(users.length);
-      }
-    };
-    getUsers();
-  }, []);
-  const userCount = length + 1;
 
   useEffect(() => {
     if (userProfile) {
       setInitialValues({
         userName: userProfile.userName || "",
-        userNumber: userCount,
+        userNumber: 0,
         photoUrl: userProfile.photoUrl || "",
         bio: userProfile.bio || "",
         created: new Date(),
         lastUpdate: new Date(),
       });
     }
-  }, [length, userCount, userProfile]);
+  }, [userProfile]);
 
   const handleSubmit = async (values: UserProfileFormValues) => {
     const profileValues = { ...values, photoUrl: avatarImage };
+    if (authUser && values) {
     try {
-      authUser &&
-        values &&
-        (await createUserProfile(authUser?.uid, profileValues));
+      await createUserProfile(authUser?.uid, profileValues)
       setUserProfile(profileValues);
     } catch (e) {
       console.warn(e);
     }
+  }
   };
 
   return (
@@ -137,6 +138,7 @@ export const UserProfile = () => {
       initialValues={initialValues}
       onSubmit={(values) => {
         handleSubmit(values);
+        navigate("/");
       }}
     >
       {({ values, dirty }) => (

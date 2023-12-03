@@ -15,17 +15,30 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { auth } from "../firebase";
-import { CaMeme, CaPost } from "../model";
+import { TopBar } from "../Components/TopBar";
+import { auth, subscribeToMemes } from "../firebase";
+import { CaPost } from "../model";
 
-interface HotPageProps {
-  memes?: CaPost[];
-}
-
-export const HomePage = ({ memes }: HotPageProps) => {
+export const HomePage = () => {
+  const [memes, setMemes] = useState<CaPost[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribeToMemes = subscribeToMemes((memes) => {
+      if (memes) {
+        setMemes(memes);
+      } else {
+        console.error("no user");
+      }
+    });
+
+    return () => {
+      unsubscribeToMemes();
+    };
+  }, [navigate]);
   const handleUpvote = () => {
     if (auth) {
       navigate("/signin");
@@ -45,6 +58,8 @@ export const HomePage = ({ memes }: HotPageProps) => {
     console.log("report post");
   };
   return (
+    <>
+    <TopBar/>
     <Grid
       container
       sx={{
@@ -187,5 +202,6 @@ export const HomePage = ({ memes }: HotPageProps) => {
         </Link>
       </Box>
     </Grid>
+    </>
   );
 };

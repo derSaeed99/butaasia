@@ -1,7 +1,7 @@
 import "firebase/auth";
 
 import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
-import { GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,27 +10,23 @@ import { auth, checkUserProfile } from "../firebase";
 import { Register } from "./Register";
 
 export const SignIn = () => {
-  const [, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [profileExists, setProfileExists] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
-      if (user) {
-        navigate("/");
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
+    const getProfileInfo = async () => {
+    const hasProfile = await checkUserProfile();
+    setProfileExists(Boolean(hasProfile));
+    }
+    getProfileInfo();
+  }, [auth, error]);
+  
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      const hasProfile = await checkUserProfile();
-      if (hasProfile) {
+      if (profileExists) {
         navigate("/");
       } else {
         navigate("/profile");

@@ -7,6 +7,7 @@ export interface CaUserId {
 export interface CaUser extends CaUserId {
   userName: string;
   userNumber: number;
+  role?:  string;
   photoUrl?: string;
   created?: Date;
   lastLogin?: Date;

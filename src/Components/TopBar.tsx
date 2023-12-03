@@ -33,7 +33,7 @@ import { CaUser } from "../model";
 
 export const TopBar = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [userProfile, setUserProfile] = useState<CaUser | null>();
+  const [userProfile, setUserProfile] = useState<CaUser | null>(null);
   const [anchorEl, setAnchorEl] = useState(null as null | HTMLElement);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
@@ -42,20 +42,33 @@ export const TopBar = () => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
-        subscribeToUser(user.uid, (profile) => {
-          setUserProfile(profile);
-        });
       } else {
         console.error("no user");
       }
+      const unsubscribeToUserProfile = subscribeToUser({
+        userId: user?.uid ?? "",
+        observer: (profile: React.SetStateAction<CaUser | null>) => {
+          setUserProfile(profile);
+        },
+        onError: (error) => {
+          setUserProfile(null)
+          console.error(error);
+        }
+      })
+      return () => {
+        unsubscribe()
+        unsubscribeToUserProfile()
+      };
     });
-
-    return unsubscribe;
-  }, []);
+  }, [user]);
 
   const handleClick = () => {
+  if (user) {
     setDrawerOpen(true);
-  };
+  } else {
+    navigate("/signin");
+  }
+};
 
   const handleClose = () => {
     setAnchorEl(null);

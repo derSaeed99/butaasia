@@ -9,7 +9,7 @@ import { CaUser } from "../model";
 
 export const UserProfile = () => {
   const [userProfile, setUserProfile] = useState<CaUser | null>(null);
-  const { userId } = useParams<{userId: string}>();
+  const { userId } = useParams<{ userId: string }>();
   useEffect(() => {
     if (userId) {
       const unsubscribeToUserProfile = subscribeToUser({
@@ -23,14 +23,20 @@ export const UserProfile = () => {
         },
       });
       return () => {
-        unsubscribeToUserProfile()
+        unsubscribeToUserProfile();
       };
     }
   }, [userId]);
 
-
   return (
-    <Box sx={{display:"flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <ProfileInfos userProfile={userProfile} />
       <ProfileForm userProfile={userProfile} />
     </Box>

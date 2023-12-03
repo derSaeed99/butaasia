@@ -20,9 +20,11 @@ export const getRedirectRoute = () => {
 };
 
 const RootRedirect = () => {
-    const userInfoFromLocalStorage = localStorage.getItem("userInfo");
-    const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
-    
+  const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+  const userExists = userInfoFromLocalStorage
+    ? JSON.parse(userInfoFromLocalStorage)
+    : null;
+
   if (!userExists) {
     return (
       <Routes>
@@ -34,11 +36,13 @@ const RootRedirect = () => {
 };
 
 const SignInRedirect = () => {
-    const userInfoFromLocalStorage = localStorage.getItem("userInfo");
-    const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
+  const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+  const userExists = userInfoFromLocalStorage
+    ? JSON.parse(userInfoFromLocalStorage)
+    : null;
   const location = useLocation();
   const redirect = location.state?.from;
-  console.log(userExists)
+  console.log(userExists);
   return userExists ? <Navigate to={redirect || "/"} /> : <SignIn />;
 };
 
@@ -53,12 +57,13 @@ export const router = createBrowserRouter(
         }}
       />
       <Route path="profile/*" element={<ProtectedRoute />}>
-        <Route 
-        path=":userId"
-        lazy={async () => {
+        <Route
+          path=":userId"
+          lazy={async () => {
             const { UserProfile } = await import("./Pages/UserProfile");
             return { Component: UserProfile };
-        }} />
+          }}
+        />
       </Route>
       <Route path="/form" element={<ProtectedRoute />}>
         <Route path="/form" element={<MemeForm />} />

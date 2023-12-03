@@ -37,7 +37,10 @@ export const incrementUserCounter = onDocumentWritten(
 
           // Set counter value on user document
           const userRef = firestore.collection("users").doc(userId);
-          transaction.update(userRef, { created: new Date(), userNumber: newCount });
+          transaction.update(userRef, {
+            created: new Date(),
+            userNumber: newCount,
+          });
           log("User counter incremented", { userId, newCount });
         });
       } catch (error) {

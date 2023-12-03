@@ -13,9 +13,11 @@ export const SignIn = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-    const userInfoFromLocalStorage = localStorage.getItem("userInfo");
-    const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
-    const [userProfile, setUserProfile] = useState<CaUser | null>(null);
+  const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+  const userExists = userInfoFromLocalStorage
+    ? JSON.parse(userInfoFromLocalStorage)
+    : null;
+  const [userProfile, setUserProfile] = useState<CaUser | null>(null);
   useEffect(() => {
     if (userExists) {
       const unsubscribeToUserProfile = subscribeToUser({
@@ -29,16 +31,16 @@ export const SignIn = () => {
         },
       });
       return () => {
-        unsubscribeToUserProfile()
+        unsubscribeToUserProfile();
       };
     }
   }, []);
-  
+
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      setUserInfoInLocalStorage()
+      setUserInfoInLocalStorage();
       if (userProfile?.userName) {
         navigate("/");
       } else {
@@ -118,9 +120,7 @@ export const SignIn = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <Button onClick={()=> navigate("/")}>
-            Home
-          </Button>
+          <Button onClick={() => navigate("/")}>Home</Button>
         </Grid>
       </Grid>
     </Grid>

@@ -36,7 +36,9 @@ export const TopBar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
   const userInfoFromLocalStorage = localStorage.getItem("userInfo");
-  const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
+  const userExists = userInfoFromLocalStorage
+    ? JSON.parse(userInfoFromLocalStorage)
+    : null;
   useEffect(() => {
     if (userExists) {
       const unsubscribeToUserProfile = subscribeToUser({
@@ -52,7 +54,7 @@ export const TopBar = () => {
       return () => {
         unsubscribeToUserProfile();
       };
-  }
+    }
   }, []);
 
   const handleClick = () => {
@@ -163,7 +165,9 @@ export const TopBar = () => {
                   <MenuItem>
                     <IconButton
                       sx={{ color: "white", m: 1 }}
-                      onClick={() => navigate(`/profile/${userProfile?.userId}`)}
+                      onClick={() =>
+                        navigate(`/profile/${userProfile?.userId}`)
+                      }
                     >
                       <PersonIcon />
                       Profile

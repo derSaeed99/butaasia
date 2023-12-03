@@ -47,7 +47,10 @@ export const createUserProfile = async (userId: string, user: CaUser) => {
   }
 };
 
-export const updateUserProfile = async (userId: string, updates: UserProfileFormValues) => {
+export const updateUserProfile = async (
+  userId: string,
+  updates: UserProfileFormValues
+) => {
   try {
     const userProfileDocRef = doc(db, "users", userId);
     const updateData = {
@@ -94,11 +97,11 @@ export const subscribeToUser = ({
     doc(db, "users", userId),
     (snapshot) => {
       if (snapshot.exists()) {
-      const user = {...snapshot.data(), userId: snapshot.id} as CaUser;
-      observer?.(user);
-    } else {
+        const user = { ...snapshot.data(), userId: snapshot.id } as CaUser;
+        observer?.(user);
+      } else {
         observer?.(null);
-        console.warn("User does not exist")
+        console.warn("User does not exist");
       }
     },
     onError

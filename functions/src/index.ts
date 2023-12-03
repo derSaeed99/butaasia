@@ -11,7 +11,7 @@ export const incrementUserCounter = onDocumentWritten(
   async (event) => {
     // Only run if the document is newly created
     if (!event.data.before.exists && event.data.after.exists) {
-      log("New user created; incrementing user counter in counters collection")
+      log("New user created; incrementing user counter in counters collection");
       const countersRef = firestore.collection("counters").doc("userCounter");
       const userDocRef = event.data.before.ref;
       const userDoc = await userDocRef.get();
@@ -38,7 +38,7 @@ export const incrementUserCounter = onDocumentWritten(
           // Set counter value on user document
           const userRef = firestore.collection("users").doc(userId);
           transaction.update(userRef, { userNumber: newCount });
-          log("User counter incremented", { userId, newCount })
+          log("User counter incremented", { userId, newCount });
         });
       } catch (error) {
         console.error("Error updating user count:", error);

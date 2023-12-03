@@ -12,6 +12,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
@@ -38,6 +39,19 @@ export const createUserProfile = async (userId: string, user: CaUser) => {
   try {
     const userProfileDocRef = doc(collection(db, "users"), userId);
     await setDoc(userProfileDocRef, user, { merge: true });
+  } catch (error) {
+    console.error("Error adding UserProfile: ", error);
+  }
+};
+
+export const updateUserProfile = async (userId: string, updates: CaUser) => {
+  try {
+    const userProfileDocRef = doc(collection(db, "users"), userId);
+    const updateData = {
+      ...updates,
+      lastUpdate: new Date(),
+    }
+    await updateDoc(userProfileDocRef, updateData);
   } catch (error) {
     console.error("Error adding UserProfile: ", error);
   }

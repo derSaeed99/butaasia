@@ -41,7 +41,10 @@ export const incrementUserCounter = onDocumentWritten(
             created: new Date(),
             userNumber: newCount,
           });
-          log("User counter incremented", { created: new Date(), userId, newCount });
+          log("User counter incremented", {
+            userId,
+            newCount,
+          });
         });
       } catch (error) {
         console.error("Error updating user count:", error);

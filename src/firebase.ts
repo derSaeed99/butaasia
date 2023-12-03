@@ -50,7 +50,7 @@ export const updateUserProfile = async (userId: string, updates: CaUser) => {
     const updateData = {
       ...updates,
       lastUpdate: new Date(),
-    }
+    };
     await updateDoc(userProfileDocRef, updateData);
   } catch (error) {
     console.error("Error adding UserProfile: ", error);

@@ -1,5 +1,11 @@
 import { Avatar, Button, Grid } from "@mui/material";
-import { auth, createUserProfile, subscribeToUser, updateUserProfile, uploadImageAndSaveUrl } from "firebase";
+import {
+  auth,
+  createUserProfile,
+  subscribeToUser,
+  updateUserProfile,
+  uploadImageAndSaveUrl,
+} from "firebase";
 import { User } from "firebase/auth";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-mui";
@@ -8,59 +14,59 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface UserProfileFormValues {
-    userName: string;
-    userNumber: number;
-    photoUrl?: string;
-    bio?: string;
-    created?: Date;
-    lastUpdate?: Date;
-  }
-  
-  interface AvatarInputProps {
-    name: string;
-    value: string;
-    userId: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  }
-  
-  const AvatarInput = ({ name, value, onChange, userId }: AvatarInputProps) => {
-    const [avatarImage, setAvatarImage] = useState<string>("");
-  
-    const handleAvatarClick = () => {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "image/*";
-      input.onchange = async (e) => {
-        const file = (e.target as HTMLInputElement).files?.[0];
-        if (file) {
-          const imageUrl = await uploadImageAndSaveUrl(userId, file);
-          setAvatarImage(imageUrl);
-          onChange({
-            target: {
-              name,
-              value: imageUrl,
-            },
-          } as React.ChangeEvent<HTMLInputElement>);
-        }
-      };
-      input.click();
+  userName: string;
+  userNumber: number;
+  photoUrl?: string;
+  bio?: string;
+  created?: Date;
+  lastUpdate?: Date;
+}
+
+interface AvatarInputProps {
+  name: string;
+  value: string;
+  userId: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const AvatarInput = ({ name, value, onChange, userId }: AvatarInputProps) => {
+  const [avatarImage, setAvatarImage] = useState<string>("");
+
+  const handleAvatarClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const imageUrl = await uploadImageAndSaveUrl(userId, file);
+        setAvatarImage(imageUrl);
+        onChange({
+          target: {
+            name,
+            value: imageUrl,
+          },
+        } as React.ChangeEvent<HTMLInputElement>);
+      }
     };
-  
-    return (
-      <>
-        <input type="hidden" name={name} value={value} />
-        <Avatar
-          sx={{ width: 100, height: 100 }}
-          alt="user profile image"
-          src={avatarImage || value}
-          onClick={handleAvatarClick}
-        />
-      </>
-    );
+    input.click();
   };
 
+  return (
+    <>
+      <input type="hidden" name={name} value={value} />
+      <Avatar
+        sx={{ width: 100, height: 100 }}
+        alt="user profile image"
+        src={avatarImage || value}
+        onClick={handleAvatarClick}
+      />
+    </>
+  );
+};
+
 export const ProfileForm = () => {
-    const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authUser, setAuthUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<CaUser | null>(null);
   const [avatarImage, setAvatarImage] = useState<string>("");
   const navigate = useNavigate();
@@ -111,24 +117,26 @@ export const ProfileForm = () => {
     }
   }, [userProfile]);
 
-    const handleSubmit = async (values: UserProfileFormValues) => {
-        const profileValues = { ...values, photoUrl: avatarImage };
-        if ((authUser && values) && values.userNumber < 0) {
-          try {
-            await createUserProfile(authUser?.uid, profileValues);
-            setUserProfile(profileValues);
-          } catch (e) {
-            console.warn(e);
-          }
-        } else {
-          try {
-            authUser && values !== profileValues && await updateUserProfile(authUser?.uid, profileValues);
-                setUserProfile(profileValues);
-              } catch (e) {
-                console.warn(e);
-              }
-        }
-      };
+  const handleSubmit = async (values: UserProfileFormValues) => {
+    const profileValues = { ...values, photoUrl: avatarImage };
+    if (authUser && values && values.userNumber < 0) {
+      try {
+        await createUserProfile(authUser?.uid, profileValues);
+        setUserProfile(profileValues);
+      } catch (e) {
+        console.warn(e);
+      }
+    } else {
+      try {
+        authUser &&
+          values !== profileValues &&
+          (await updateUserProfile(authUser?.uid, profileValues));
+        setUserProfile(profileValues);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  };
   return (
     <Formik
       initialValues={initialValues}
@@ -224,5 +232,5 @@ export const ProfileForm = () => {
         </Form>
       )}
     </Formik>
-  )
-}
+  );
+};

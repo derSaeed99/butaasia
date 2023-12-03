@@ -2,37 +2,58 @@ import "firebase/auth";
 
 import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { CaUser } from "model";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import logo from "../assets/miimcom-logo.svg";
-import { auth, checkUserProfile } from "../firebase";
-import { Register } from "./Register";
+import { auth, subscribeToUser } from "../firebase";
 
 export const SignIn = () => {
   const [error, setError] = useState<string | null>(null);
-  const [profileExists, setProfileExists] = useState<boolean>(false);
   const navigate = useNavigate();
 
+    const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+    const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
+    const [userProfile, setUserProfile] = useState<CaUser | null>(null);
   useEffect(() => {
-    const getProfileInfo = async () => {
-      const hasProfile = await checkUserProfile();
-      setProfileExists(Boolean(hasProfile));
-    };
-    getProfileInfo();
-  }, [auth, error]);
-
+    if (userExists) {
+      const unsubscribeToUserProfile = subscribeToUser({
+        userId: userExists.uid,
+        observer: (profile: CaUser | null) => {
+          setUserProfile(profile);
+        },
+        onError: (error) => {
+          setUserProfile(null);
+          console.error(error);
+        },
+      });
+      return () => {
+        unsubscribeToUserProfile()
+      };
+    }
+  }, []);
+  
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      if (profileExists) {
+      setUserInfoInLocalStorage()
+      if (userProfile?.userName) {
         navigate("/");
       } else {
-        navigate("/profile");
+        navigate(`/profile/${auth.currentUser?.uid}`);
       }
     } catch (error) {
       setError(`Unexpected error while logging in: ${error}`);
+    }
+  };
+  const setUserInfoInLocalStorage = () => {
+    const user = auth.currentUser;
+    if (user) {
+      const { uid } = user;
+      const userInfo = { uid };
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
     }
   };
 
@@ -90,26 +111,16 @@ export const SignIn = () => {
             sx={{ color: "black", backgroundColor: "white" }}
             onClick={handleGoogleSignIn}
           >
-            Sign In with Google
+            Register/Sign In with Google
           </Button>
           <Typography variant="caption" color="error">
             {error}
           </Typography>
         </Grid>
-        <Grid
-          item
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            mt: 5,
-          }}
-        >
-          <Typography variant="caption" color="GrayText" gutterBottom>
-            Not registered yet?
-          </Typography>
-          <Register />
+        <Grid item>
+          <Button onClick={()=> navigate("/")}>
+            Home
+          </Button>
         </Grid>
       </Grid>
     </Grid>

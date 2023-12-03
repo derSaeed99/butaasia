@@ -23,7 +23,6 @@ import {
   PopoverOrigin,
   Toolbar,
 } from "@mui/material";
-import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -32,21 +31,16 @@ import { auth, subscribeToUser } from "../firebase";
 import { CaUser } from "../model";
 
 export const TopBar = () => {
-  const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<CaUser | null>(null);
   const [anchorEl, setAnchorEl] = useState(null as null | HTMLElement);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
-
+  const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+  const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        console.error("no user");
-      }
+    if (userExists) {
       const unsubscribeToUserProfile = subscribeToUser({
-        userId: user?.uid ?? "",
+        userId: userExists.uid,
         observer: (profile: React.SetStateAction<CaUser | null>) => {
           setUserProfile(profile);
         },
@@ -56,14 +50,13 @@ export const TopBar = () => {
         },
       });
       return () => {
-        unsubscribe();
         unsubscribeToUserProfile();
       };
-    });
-  }, [user]);
+  }
+  }, []);
 
   const handleClick = () => {
-    if (user) {
+    if (userExists) {
       setDrawerOpen(true);
     } else {
       navigate("/signin");
@@ -81,20 +74,19 @@ export const TopBar = () => {
   const logout = async () => {
     try {
       await auth.signOut();
-      if (user) {
+      localStorage.clear();
+      if (userExists) {
         navigate("/signin");
       }
     } catch (error) {
       console.error(error);
     }
   };
-
   const open = Boolean(anchorEl);
   const popoverOrigin: PopoverOrigin = {
     vertical: "bottom",
     horizontal: "left",
   };
-
   return (
     <>
       <AppBar
@@ -138,7 +130,7 @@ export const TopBar = () => {
                   size="medium"
                   sx={{ color: "GrayText" }}
                   onClick={(event) => {
-                    user
+                    userExists
                       ? setAnchorEl(event.currentTarget)
                       : navigate("/signin");
                   }}
@@ -171,7 +163,7 @@ export const TopBar = () => {
                   <MenuItem>
                     <IconButton
                       sx={{ color: "white", m: 1 }}
-                      onClick={() => navigate("/profile")}
+                      onClick={() => navigate(`/profile/${userProfile?.userId}`)}
                     >
                       <PersonIcon />
                       Profile

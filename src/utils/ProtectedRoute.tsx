@@ -1,6 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-import { auth } from "../firebase";
 
 export interface ProtectedRouteProps {
   permittedRoles?: string[];
@@ -8,7 +7,8 @@ export interface ProtectedRouteProps {
 
 export const ProtectedRoute = () => {
   const location = useLocation();
-
+  const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+  const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
   // const canOpen = () =>
   //   Boolean(authUser && user && (!permittedRoles || permittedRoles.includes(user.role ?? "")));
 
@@ -17,7 +17,7 @@ export const ProtectedRoute = () => {
   }`;
   return (
     <>
-      {auth ? (
+      {userExists ? (
         <Outlet />
       ) : (
         <Navigate

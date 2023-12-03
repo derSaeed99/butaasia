@@ -10,10 +10,8 @@ import {
 import { App } from "./App";
 import { MemeForm } from "./Components/MemeForm";
 import { SignIn } from "./Components/SignIn";
-import { auth } from "./firebase";
 import { Legal } from "./Pages/Legal";
 import { Privacy } from "./Pages/Privacy";
-import { UserProfile } from "./Pages/UserProfile";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
 
 export const getRedirectRoute = () => {
@@ -22,8 +20,10 @@ export const getRedirectRoute = () => {
 };
 
 const RootRedirect = () => {
-  const user = auth.currentUser;
-  if (!user) {
+    const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+    const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
+    
+  if (!userExists) {
     return (
       <Routes>
         <Route path={"/"} element={<App />} />
@@ -34,10 +34,12 @@ const RootRedirect = () => {
 };
 
 const SignInRedirect = () => {
-  const user = auth.currentUser;
+    const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+    const userExists = userInfoFromLocalStorage ? JSON.parse(userInfoFromLocalStorage) : null;
   const location = useLocation();
   const redirect = location.state?.from;
-  return user ? <Navigate to={redirect || "/"} /> : <SignIn />;
+  console.log(userExists)
+  return userExists ? <Navigate to={redirect || "/"} /> : <SignIn />;
 };
 
 export const router = createBrowserRouter(
@@ -50,8 +52,13 @@ export const router = createBrowserRouter(
           return { Component: HomePage };
         }}
       />
-      <Route path="/profile" element={<ProtectedRoute />}>
-        <Route path="/profile" element={<UserProfile />} />
+      <Route path="profile/*" element={<ProtectedRoute />}>
+        <Route 
+        path=":userId"
+        lazy={async () => {
+            const { UserProfile } = await import("./Pages/UserProfile");
+            return { Component: UserProfile };
+        }} />
       </Route>
       <Route path="/form" element={<ProtectedRoute />}>
         <Route path="/form" element={<MemeForm />} />

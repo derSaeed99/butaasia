@@ -10,6 +10,7 @@ export interface CaUser extends CaUserId {
   role?: string;
   photoUrl?: string;
   created?: Date;
+  mfaEnabled?: boolean;
   lastLogin?: Date;
   bio?: string;
   posts?: CaPost[];

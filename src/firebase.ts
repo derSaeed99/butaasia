@@ -1,10 +1,10 @@
+import { UserProfileFormValues } from "Components/ProfileForm";
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import {
   collection,
   doc,
   FirestoreError,
-  getDoc,
   getDocs,
   getFirestore,
   limit,
@@ -13,7 +13,6 @@ import {
   query,
   setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -34,19 +33,23 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-
 export const createUserProfile = async (userId: string, user: CaUser) => {
   try {
     const userProfileDocRef = doc(collection(db, "users"), userId);
-    await setDoc(userProfileDocRef, user, { merge: true });
+    const addData = {
+      ...user,
+      created: new Date(),
+      lastUpdate: new Date(),
+    };
+    await setDoc(userProfileDocRef, addData, { merge: true });
   } catch (error) {
     console.error("Error adding UserProfile: ", error);
   }
 };
 
-export const updateUserProfile = async (userId: string, updates: CaUser) => {
+export const updateUserProfile = async (userId: string, updates: UserProfileFormValues) => {
   try {
-    const userProfileDocRef = doc(collection(db, "users"), userId);
+    const userProfileDocRef = doc(db, "users", userId);
     const updateData = {
       ...updates,
       lastUpdate: new Date(),
@@ -88,10 +91,15 @@ export const subscribeToUser = ({
   onError?: (error: FirestoreError) => void;
 }) => {
   return onSnapshot(
-    query(collection(db, "users"), where("userId", "==", userId)),
+    doc(db, "users", userId),
     (snapshot) => {
-      const user = snapshot.docs[0]?.data() as CaUser;
-      observer(user);
+      if (snapshot.exists()) {
+      const user = {...snapshot.data(), userId: snapshot.id} as CaUser;
+      observer?.(user);
+    } else {
+        observer?.(null);
+        console.warn("User does not exist")
+      }
     },
     onError
   );
@@ -118,7 +126,7 @@ export const uploadImageAndSaveUrl = async (
     const storageRef = ref(storage, `images/${userId}/photoUrl.jpg`);
     await uploadBytes(storageRef, imageFile);
     const downloadUrl = await getDownloadURL(storageRef);
-    await setDoc(userDocRef, { photoUrl: downloadUrl });
+    await setDoc(userDocRef, { photoUrl: downloadUrl }, { merge: true });
     return downloadUrl;
   } catch (error) {
     console.error("Error uploading image and saving URL: ", error);
@@ -148,16 +156,6 @@ export const uploadMemeAndSaveUrl = async (
     console.error("Error uploading image and saving URL: ", error);
     throw error;
   }
-};
-
-export const checkUserProfile = async (): Promise<boolean> => {
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    return false;
-  }
-  const profileDocRef = doc(db, "users", currentUser.uid);
-  const profileDoc = await getDoc(profileDocRef);
-  return profileDoc.exists();
 };
 
 export const subscribeToMemes = (callback: (posts: CaPost[]) => void) => {

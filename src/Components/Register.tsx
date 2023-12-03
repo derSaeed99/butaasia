@@ -13,7 +13,7 @@ export const Register = () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      navigate("/profile")
+      navigate("/profile");
     } catch (error) {
       setError(`Unexpected error while logging in: ${error}`);
     }

@@ -7,11 +7,7 @@ import { TextField } from "formik-mui";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-  auth,
-  createUserProfile,
-  uploadImageAndSaveUrl,
-} from "../firebase";
+import { auth, createUserProfile, uploadImageAndSaveUrl } from "../firebase";
 import { subscribeToUser } from "../firebase";
 import { CaUser } from "../model";
 
@@ -71,7 +67,7 @@ export const UserProfile = () => {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<CaUser | null>(null);
   const [avatarImage, setAvatarImage] = useState<string>("");
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [initialValues, setInitialValues] = useState<UserProfileFormValues>({
     userName: userProfile?.userName || "",
@@ -95,18 +91,16 @@ const navigate = useNavigate();
           setUserProfile(profile);
         },
         onError: (error) => {
-          setUserProfile(null)
+          setUserProfile(null);
           console.error(error);
-        }
-      })
-      return ()=>{
-        unsubscribe()
-        unsubscribeToUserProfile()
+        },
+      });
+      return () => {
+        unsubscribe();
+        unsubscribeToUserProfile();
       };
     });
-
   }, []);
-
 
   useEffect(() => {
     if (userProfile) {
@@ -124,13 +118,13 @@ const navigate = useNavigate();
   const handleSubmit = async (values: UserProfileFormValues) => {
     const profileValues = { ...values, photoUrl: avatarImage };
     if (authUser && values) {
-    try {
-      await createUserProfile(authUser?.uid, profileValues)
-      setUserProfile(profileValues);
-    } catch (e) {
-      console.warn(e);
+      try {
+        await createUserProfile(authUser?.uid, profileValues);
+        setUserProfile(profileValues);
+      } catch (e) {
+        console.warn(e);
+      }
     }
-  }
   };
 
   return (

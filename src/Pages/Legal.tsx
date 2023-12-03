@@ -1,7 +1,3 @@
-
-
 export const Legal = () => {
-  return (
-    <div>Legal</div>
-  )
-}
+  return <div>Legal</div>;
+};

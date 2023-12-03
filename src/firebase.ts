@@ -67,21 +67,20 @@ export const getAuthenticatedUser = (): Promise<{
 export const subscribeToUser = ({
   userId,
   observer,
-  onError
+  onError,
 }: {
-  userId: string,
-  observer: (user: CaUser | null) => void,
-  onError?: (error: FirestoreError) => void
+  userId: string;
+  observer: (user: CaUser | null) => void;
+  onError?: (error: FirestoreError) => void;
 }) => {
- return onSnapshot(
-  query(
-    collection(db, "users"),
-    where("userId", "==", userId)), (snapshot) => {
+  return onSnapshot(
+    query(collection(db, "users"), where("userId", "==", userId)),
+    (snapshot) => {
       const user = snapshot.docs[0]?.data() as CaUser;
       observer(user);
     },
     onError
-    );
+  );
 };
 
 export const getAllUsers = async () => {

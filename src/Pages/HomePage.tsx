@@ -59,149 +59,153 @@ export const HomePage = () => {
   };
   return (
     <>
-    <TopBar/>
-    <Grid
-      container
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
-      <List>
-        {memes?.map((post) => (
-          <>
-            <ListItem key={post.postId} sx={{ borderRadius: "8px", mb: 2 }}>
-              <Grid
-                item
-                xs={12}
-                sx={{ display: "flex", flexDirection: "column" }}
-              >
+      <TopBar />
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <List>
+          {memes?.map((post) => (
+            <>
+              <ListItem key={post.postId} sx={{ borderRadius: "8px", mb: 2 }}>
                 <Grid
                   item
                   xs={12}
-                  display="flex"
-                  justifyContent={"space-between"}
+                  sx={{ display: "flex", flexDirection: "column" }}
                 >
-                  <ListItemText
+                  <Grid
+                    item
+                    xs={12}
+                    display="flex"
+                    justifyContent={"space-between"}
+                  >
+                    <ListItemText
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mt: 2,
+                        mb: 2,
+                      }}
+                      primary={
+                        <Typography
+                          variant="h6"
+                          color={"white"}
+                          fontWeight={"bold"}
+                        >
+                          {post.caption}
+                        </Typography>
+                      }
+                      secondary={
+                        <IconButton
+                          size="small"
+                          sx={{ color: "GrayText" }}
+                          onClick={handleMoreVert}
+                        >
+                          <MoreVert />
+                        </IconButton>
+                      }
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
                     sx={{
                       display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
+                      justifyContent: "center",
                       alignItems: "center",
-                      mt: 2,
-                      mb: 2,
-                    }}
-                    primary={
-                      <Typography
-                        variant="h6"
-                        color={"white"}
-                        fontWeight={"bold"}
-                      >
-                        {post.caption}
-                      </Typography>
-                    }
-                    secondary={
-                      <IconButton
-                        size="small"
-                        sx={{ color: "GrayText" }}
-                        onClick={handleMoreVert}
-                      >
-                        <MoreVert />
-                      </IconButton>
-                    }
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    src={post.mediaUrl}
-                    alt={post.caption}
-                    style={{
-                      width: "100%",
-                      objectFit: "contain",
-                    }}
-                    sx={{ maxHeight: "45vh", p: 0, m: 0 }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      mt: 2,
-                      mb: 2,
-                      justifyContent: "flex-start",
                     }}
                   >
-                    <IconButton
-                      size="medium"
-                      sx={{ color: "GrayText" }}
-                      onClick={handleUpvote}
+                    <CardMedia
+                      component="img"
+                      src={post.mediaUrl}
+                      alt={post.caption}
+                      style={{
+                        width: "100%",
+                        objectFit: "contain",
+                      }}
+                      sx={{ maxHeight: "45vh", p: 0, m: 0 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mt: 2,
+                        mb: 2,
+                        justifyContent: "flex-start",
+                      }}
                     >
-                      <ThumbUpOffAltIcon />
-                    </IconButton>
-                    <Box>
-                      <Typography variant="body1" sx={{ color: "GrayText" }}>
-                        {post.upvotes}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
                       <IconButton
                         size="medium"
                         sx={{ color: "GrayText" }}
-                        onClick={handleDownVote}
+                        onClick={handleUpvote}
                       >
-                        <ThumbDownOffAltIcon />
+                        <ThumbUpOffAltIcon />
                       </IconButton>
-                      <Typography
-                        variant="body1"
-                        sx={{ color: "GrayText", ml: 1 }}
+                      <Box>
+                        <Typography variant="body1" sx={{ color: "GrayText" }}>
+                          {post.upvotes}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", ml: 2 }}
                       >
-                        {post.downvotes}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
-                      <IconButton size="medium" sx={{ color: "GrayText" }}>
-                        <ChatBubbleOutlineIcon />
-                      </IconButton>
-                      <Typography
-                        variant="body1"
-                        sx={{ color: "GrayText", ml: 1 }}
+                        <IconButton
+                          size="medium"
+                          sx={{ color: "GrayText" }}
+                          onClick={handleDownVote}
+                        >
+                          <ThumbDownOffAltIcon />
+                        </IconButton>
+                        <Typography
+                          variant="body1"
+                          sx={{ color: "GrayText", ml: 1 }}
+                        >
+                          {post.downvotes}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", ml: 2 }}
                       >
-                        {Math.floor(Math.random() * 100)}
-                      </Typography>
+                        <IconButton size="medium" sx={{ color: "GrayText" }}>
+                          <ChatBubbleOutlineIcon />
+                        </IconButton>
+                        <Typography
+                          variant="body1"
+                          sx={{ color: "GrayText", ml: 1 }}
+                        >
+                          {Math.floor(Math.random() * 100)}
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
+                  </Grid>
                 </Grid>
+              </ListItem>
+              <Grid item xs={12}>
+                <Divider sx={{ mt: 2, mb: 2, borderColor: "GrayText" }} />
               </Grid>
-            </ListItem>
-            <Grid item xs={12}>
-              <Divider sx={{ mt: 2, mb: 2, borderColor: "GrayText" }} />
-            </Grid>
-          </>
-        ))}
-      </List>
-      <Box sx={{ position: "fixed", bottom: "32px", right: "32px" }}>
-        <Link to="/form">
-          <Fab
-            sx={{ color: "purple", backgroundColor: "yellow" }}
-            aria-label="add"
-          >
-            <AddIcon />
-          </Fab>
-        </Link>
-      </Box>
-    </Grid>
+            </>
+          ))}
+        </List>
+        <Box sx={{ position: "fixed", bottom: "32px", right: "32px" }}>
+          <Link to="/form">
+            <Fab
+              sx={{ color: "purple", backgroundColor: "yellow" }}
+              aria-label="add"
+            >
+              <AddIcon />
+            </Fab>
+          </Link>
+        </Box>
+      </Grid>
     </>
   );
 };

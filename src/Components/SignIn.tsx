@@ -16,12 +16,12 @@ export const SignIn = () => {
 
   useEffect(() => {
     const getProfileInfo = async () => {
-    const hasProfile = await checkUserProfile();
-    setProfileExists(Boolean(hasProfile));
-    }
+      const hasProfile = await checkUserProfile();
+      setProfileExists(Boolean(hasProfile));
+    };
     getProfileInfo();
   }, [auth, error]);
-  
+
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {

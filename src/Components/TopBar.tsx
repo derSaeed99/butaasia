@@ -51,24 +51,24 @@ export const TopBar = () => {
           setUserProfile(profile);
         },
         onError: (error) => {
-          setUserProfile(null)
+          setUserProfile(null);
           console.error(error);
-        }
-      })
+        },
+      });
       return () => {
-        unsubscribe()
-        unsubscribeToUserProfile()
+        unsubscribe();
+        unsubscribeToUserProfile();
       };
     });
   }, [user]);
 
   const handleClick = () => {
-  if (user) {
-    setDrawerOpen(true);
-  } else {
-    navigate("/signin");
-  }
-};
+    if (user) {
+      setDrawerOpen(true);
+    } else {
+      navigate("/signin");
+    }
+  };
 
   const handleClose = () => {
     setAnchorEl(null);

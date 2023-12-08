@@ -224,7 +224,12 @@ export const ProductDetails = ({ products }: { products: CaProduct[] }) => {
               mt: 2,
             }}
           >
-            <Rating value={rating?.total || null} readOnly precision={0.5} />
+            <Rating
+              value={rating?.total ?? 5}
+              readOnly
+              precision={0.5}
+              sx={{ mr: 2 }}
+            />
             <Select
               disabled={isInCart(product.productId)}
               sx={{ borderRadius: 50, mr: 2 }}

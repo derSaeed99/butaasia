@@ -34,19 +34,19 @@ export const Cart = () => {
   const [cart, setCart] = useLocalStorageState<CartState>("cart", {
     defaultValue: {
       ["productId"]: {
-      productId: "",
-      title: "",
-      price: 0,
-      imageUrl: "",
-      description: "",
-      category: "",
-      createdAt: new Date(),
-      quantity: 0,
-      totalPrice: 0,
-      tax: 0,
-      delivery: "",
-    }
-    }
+        productId: "",
+        title: "",
+        price: 0,
+        imageUrl: "",
+        description: "",
+        category: "",
+        createdAt: new Date(),
+        quantity: 0,
+        totalPrice: 0,
+        tax: 0,
+        delivery: "",
+      },
+    },
   });
   const location = useLocation();
   const xs = useMediaQuery(theme.breakpoints.only("xs"));
@@ -93,7 +93,7 @@ export const Cart = () => {
   const totalTax = grandTotal - subTotal;
   const clearCart = () => {
     setCart({});
-  }
+  };
   return (
     <Box
       sx={{
@@ -105,7 +105,7 @@ export const Cart = () => {
       }}
     >
       <Box width={xs ? "100%" : "60%"}>
-      <Button onClick={clearCart}>Clear Cart</Button>
+        <Button onClick={clearCart}>Clear Cart</Button>
         <TableContainer
           component={Paper}
           elevation={0}
@@ -140,7 +140,7 @@ export const Cart = () => {
                   <TableCell align="right" component="th" scope="row">
                     <Box sx={{ display: "flex", mr: -1 }}>
                       <Select
-                      value={product.quantity}
+                        value={product.quantity}
                         sx={{ borderRadius: 50 }}
                         fullWidth
                         label={product.quantity}

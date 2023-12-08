@@ -6,7 +6,7 @@ import theme from "../Theme/Theme";
 import { CaCartItem } from "../Types/interfaces";
 
 export const BottomBar = () => {
-  const [cart, ] = useLocalStorageState<CaCartItem>("cart", {
+  const [cart] = useLocalStorageState<CaCartItem>("cart", {
     defaultValue: {
       productId: "",
       title: "",
@@ -19,14 +19,20 @@ export const BottomBar = () => {
       totalPrice: 0,
       tax: 0,
       delivery: "",
-    }
+    },
   });
 
   const productsCount: number = Object.keys(cart ?? {}).length;
   return (
-    <Box sx={{backgroundColor: theme.palette.primary.light}}>
+    <Box sx={{ backgroundColor: theme.palette.primary.light }}>
       <Box
-        sx={{ display: "flex", justifyContent: "flex-end", pr: 2, alignItems:"center", zIndex: 1 }}
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          pr: 2,
+          alignItems: "center",
+          zIndex: 1,
+        }}
       >
         <CartWidget productsCount={productsCount} />
       </Box>

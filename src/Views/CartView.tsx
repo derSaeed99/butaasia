@@ -6,7 +6,7 @@ import { Cart } from "../Store/Cart";
 import { CaCartItem } from "../Types/interfaces";
 
 export const CartView = () => {
-  const [cart, ] = useLocalStorageState<CaCartItem>("cart", {
+  const [cart] = useLocalStorageState<CaCartItem>("cart", {
     defaultValue: {
       productId: "",
       title: "",
@@ -19,7 +19,7 @@ export const CartView = () => {
       totalPrice: 0,
       tax: 0,
       delivery: "",
-    }
+    },
   });
   const emptyCart = Object.entries(cart ?? {}).length === 0;
   return emptyCart ? (

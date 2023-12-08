@@ -50,7 +50,16 @@ const RootRedirect = () => {
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<><AppBar/><BottomBar/><App /></>}>
+    <Route
+      path="/"
+      element={
+        <>
+          <AppBar />
+          <BottomBar />
+          <App />
+        </>
+      }
+    >
       <Route
         path="/"
         lazy={async () => {
@@ -59,14 +68,14 @@ export const router = createBrowserRouter(
         }}
       />
       <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/products" element={<Products />} />
-          <Route
-            path="/products/:productId"
-            element={<ProductDetails products={products} />}
-          />
-          <Route path="/cart" element={<CartView />} />
-            <Route path="" element={<RootRedirect />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/products" element={<Products />} />
+      <Route
+        path="/products/:productId"
+        element={<ProductDetails products={products} />}
+      />
+      <Route path="/cart" element={<CartView />} />
+      <Route path="" element={<RootRedirect />} />
       {/* <Route path="profile/*" element={<ProtectedRoute />}>
         <Route
           path=":userId"

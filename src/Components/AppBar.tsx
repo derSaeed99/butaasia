@@ -39,34 +39,28 @@ export const AppBar = () => {
             item
             sm={8}
             rowSpacing={2}
-            sx={{mb:2, pr:5}}
+            sx={{ mb: 2, pr: 5 }}
             display="flex"
             flexDirection="row"
             justifyContent="flex-end"
           >
             <Link>
               <Button onClick={() => navigate("/")} variant="text">
-                <Typography
-                  sx={{ color: theme.palette.primary.dark }}
-                >
+                <Typography sx={{ color: theme.palette.primary.dark }}>
                   Buta
                 </Typography>
               </Button>
             </Link>
             <Link>
               <Button onClick={() => navigate("/products")}>
-                <Typography
-                  sx={{ color: theme.palette.primary.dark }}
-                >
+                <Typography sx={{ color: theme.palette.primary.dark }}>
                   Products
                 </Typography>
               </Button>
             </Link>
             <Link>
               <Button onClick={() => navigate("/about")} variant="text">
-                <Typography
-                  sx={{ color: theme.palette.primary.dark }}
-                >
+                <Typography sx={{ color: theme.palette.primary.dark }}>
                   Buta Blog
                 </Typography>
               </Button>

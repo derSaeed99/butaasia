@@ -5,7 +5,7 @@ import theme from "./Theme/Theme";
 
 export const App = () => {
   return (
-    <Box sx={{backgroundColor:theme.palette.primary.light}}>
+    <Box sx={{ backgroundColor: theme.palette.primary.light }}>
       <Outlet />
     </Box>
   );

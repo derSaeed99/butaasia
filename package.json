@@ -19,6 +19,7 @@
     "firebase": "^10.6.0",
     "formik": "^2.4.5",
     "formik-mui": "^5.0.0-alpha.0",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",

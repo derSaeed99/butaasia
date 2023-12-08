@@ -61,7 +61,7 @@ export const AppBar = () => {
             <Link>
               <Button onClick={() => navigate("/about")} variant="text">
                 <Typography sx={{ color: theme.palette.primary.dark }}>
-                  Buta Blog
+                  Über Buta
                 </Typography>
               </Button>
             </Link>

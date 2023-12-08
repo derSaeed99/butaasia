@@ -1,16 +1,82 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import { region, https } from "firebase-functions";
+import { createOrder, capturePayment, PAYPAL_CLIENT_SECRET } from "./paypal";
+import { FieldValue, getFirestore } from "firebase-admin/firestore";
+const functions = region("europe-west1");
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+interface OrderInformation {
+  pages: number;
+  money: number;
+}
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+interface CreatePaypalOrderData {
+  pages: number;
+}
+const db = getFirestore();
+export const createPaypalOrder = functions
+  .runWith({ secrets: [PAYPAL_CLIENT_SECRET], enforceAppCheck: true })
+  .https.onCall(async ({ pages }: CreatePaypalOrderData, ctx) => {
+    if (ctx.app == undefined) {
+      throw new https.HttpsError(
+        "failed-precondition",
+        "The function must be called from an App Check verified app."
+      );
+    }
+    if (!ctx.auth) {
+      throw new https.HttpsError(
+        "failed-precondition",
+        "The function must be called from an authenticated user."
+      );
+    }
+    const money = pages * 0.1;
+    const order = await createOrder(money);
+    await db
+      .doc(`administration/${ctx.auth.uid}/orders/${order.id}`)
+      .create({ pages, money } as OrderInformation);
+    return order;
+  });
+
+interface CapturePaypalPaymentData {
+  orderID: string;
+}
+
+export const capturePaypalPayment = functions
+  .runWith({ secrets: [PAYPAL_CLIENT_SECRET], enforceAppCheck: true })
+  .https.onCall(async ({ orderID }: CapturePaypalPaymentData, ctx) => {
+    if (ctx.app == undefined) {
+      throw new https.HttpsError(
+        "failed-precondition",
+        "The function must be called from an App Check verified app."
+      );
+    }
+    if (!ctx.auth) {
+      throw new https.HttpsError(
+        "failed-precondition",
+        "The function must be called from an authenticated user."
+      );
+    }
+
+    const captureData = await capturePayment(orderID);
+    const doc = await db
+      .doc(`administration/${ctx.auth.uid}/orders/${orderID}`)
+      .get();
+    if (!doc.exists) {
+      throw new https.HttpsError(
+        "failed-precondition",
+        "The order does not exist."
+      );
+    }
+    const orderData = doc.data() as OrderInformation;
+
+    await Promise.all([
+      db.doc(`administration/${ctx.auth.uid}`).update({
+        pages: FieldValue.increment(orderData.pages),
+      }),
+      db.doc(`administration/${ctx.auth.uid}/completed/${orderID}`).create({
+        ...orderData,
+        date: FieldValue.serverTimestamp(),
+      }),
+      db.doc(`administration/${ctx.auth.uid}/orders/${orderID}`).delete(),
+    ]);
+
+    return captureData;
+  });

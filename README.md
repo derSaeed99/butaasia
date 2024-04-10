@@ -1,6 +1,6 @@
 # butaasia
 
-This is a React and TypeScript project.
+This is a React and TypeScript project (Vite-App).
 
 ## Description
 
@@ -11,23 +11,26 @@ CHECK OUT LIVE APP: https://butalanding.web.app/
 
 This project uses npm and yarn. To install dependencies, run:
 
-```sh
-yarn install
+## yarn install
 
-Usage
-To start the project, run:
+## Usage
 
-Contributing
+To start the project, run: yarn dev
+
+## Contributing
+
 If you want to contribute to this project, here's how you can do it:
 
-Fork the Project
+## Fork the Project
+
 Create your Feature Branch (git checkout -b feature/AmazingFeature)
 Commit your Changes (git commit -m 'Add some AmazingFeature')
 Push to the Branch (git push origin feature/AmazingFeature)
 Open a Pull Request
-License
-Distributed under the MIT License. See LICENSE for more information.
+
+## License
+
+Distributed under the MIT License.
 
 Contact
 Armughan Saeed - ased99@gmail.com
-```

@@ -101,7 +101,7 @@ export const Cart = () => {
         justifyContent: "center",
         alignItems: "flex-start",
         flexDirection: xs ? "column" : "row",
-        mt: 2,
+        mt: 0,
       }}
     >
       <Box width={xs ? "100%" : "60%"}>

@@ -107,7 +107,7 @@ export const ProductsList = () => {
   return (
     <Container
       maxWidth="md"
-      sx={{ backgroundColor: theme.palette.primary.light }}
+      sx={{ backgroundColor: theme.palette.primary.light, mb: 4 }}
     >
       <Box sx={{ ml: 3, pt: 2 }}>
         <Typography variant="h4">Alle Produkte</Typography>
